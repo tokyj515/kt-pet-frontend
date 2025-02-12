@@ -16,6 +16,9 @@
     <!-- 로그아웃 -->
     <button @click="logout">로그아웃</button>
 
+    <!-- ✅ 펫 등록 페이지로 이동하는 버튼 -->
+    <button @click="goToPetRegister" class="pet-btn">펫 등록하기</button>
+
     <!-- 회원 정보 수정 모달 -->
     <div v-if="isModifyModalOpen" class="modal">
       <div class="modal-content">
@@ -47,14 +50,12 @@ export default {
   setup() {
     const username = ref("");
     const email = ref("");
-
-    const modifyEmail = ref(""); // 이메일 수정
-    const modifyPassword = ref(""); // 비밀번호 수정
-
-    const isModifyModalOpen = ref(false); // 회원 정보 수정 모달
-    const isPasswordModalOpen = ref(false); // 비밀번호 수정 모달
-
     const router = useRouter();
+
+    // ✅ 펫 등록 페이지로 이동하는 함수
+    const goToPetRegister = () => {
+      router.push("/pet-register");
+    };
 
     // 유저 정보 가져오기
     const fetchUserInfo = async () => {
@@ -78,104 +79,9 @@ export default {
       }
     };
 
-    // 회원 정보 수정 API 호출
-    const modifyInfo = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        console.log("📤 이메일 수정 요청 보내는 중:", modifyEmail.value);
-
-        const response = await axios.patch(
-            "/user/modify", // ✅ JSON 형식으로 요청
-            { email: modifyEmail.value },
-            { headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"  // ✅ JSON 형식 설정
-              }}
-        );
-
-        console.log("✅ 수정 완료 응답:", response.data);
-        alert("회원 정보가 수정되었습니다.");
-
-        // ✅ 최신 정보 다시 불러오기
-        await fetchUserInfo();
-        await nextTick(); // ✅ UI 강제 업데이트
-
-        closeModifyModal();
-      } catch (error) {
-        console.error("❌ 회원 정보 수정 실패:", error.response?.data || error.message);
-        alert("회원 정보 수정에 실패했습니다.");
-      }
-    };
-
-    // 비밀번호 변경 API 호출
-    const modifyPasswordFunc = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        await axios.patch(
-            "/user/modify",
-            { password: modifyPassword.value }, // ✅ JSON 형식으로 요청
-            { headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-              }}
-        );
-
-        alert("비밀번호가 변경되었습니다.");
-        closePasswordModal();
-      } catch (error) {
-        alert("비밀번호 변경에 실패했습니다.");
-      }
-    };
-
-    // 회원 탈퇴 API 호출
-    const withdraw = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        await axios.patch("/user/withdraw", null, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        alert("회원 탈퇴가 완료되었습니다.");
-        logout();
-      } catch (error) {
-        alert("회원 탈퇴에 실패했습니다.");
-      }
-    };
-
-    // 로그아웃 처리
-    const logout = () => {
-      if (confirm("정말 로그아웃 하시겠습니까?")) { // ✅ 확인 창 추가
-        localStorage.removeItem("token");
-        alert("로그아웃 되었습니다."); // ✅ 로그아웃 완료 알림
-        router.push("/login");
-      }
-    };
-
-
-    // 모달 열고 닫기
-    const openModifyModal = () => (isModifyModalOpen.value = true);
-    const closeModifyModal = () => (isModifyModalOpen.value = false);
-    const openPasswordModal = () => (isPasswordModalOpen.value = true);
-    const closePasswordModal = () => (isPasswordModalOpen.value = false);
-
     onMounted(fetchUserInfo);
 
-    return {
-      username,
-      email,
-      logout,
-      modifyEmail,
-      modifyPassword,
-      isModifyModalOpen,
-      isPasswordModalOpen,
-      openModifyModal,
-      closeModifyModal,
-      openPasswordModal,
-      closePasswordModal,
-      modifyInfo,
-      modifyPasswordFunc,
-      withdraw,
-    };
+    return { username, email, goToPetRegister };
   },
 };
 </script>
@@ -186,18 +92,30 @@ export default {
   margin: auto;
   text-align: center;
 }
+
+/* 기본 버튼 스타일 (민트색) */
 button {
   width: 100%;
   padding: 10px;
   margin: 5px 0;
-  background-color: #40e0d0;
+  background-color: #40e0d0; /* ✅ 기본 민트색 */
   color: black;
   border: none;
   cursor: pointer;
   border-radius: 5px;
 }
+
 button:hover {
-  background-color: #008b8b;
+  background-color: #008b8b; /* ✅ 호버 시 짙은 민트색 */
+}
+
+/* ✅ 펫 관련 버튼 스타일 (핑크색) */
+button.pet-btn {
+  background-color: #FACCD9; /* ✅ 기본 연한 핑크 */
+}
+
+button.pet-btn:hover {
+  background-color: #FE80A2; /* ✅ 호버 시 진한 핑크 */
 }
 
 /* 모달 스타일 */
