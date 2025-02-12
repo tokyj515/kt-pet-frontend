@@ -144,10 +144,13 @@ export default {
 
     // 로그아웃 처리
     const logout = () => {
-      localStorage.removeItem("token");
-      alert("로그아웃 되었습니다.");
-      router.push("/login");
+      if (confirm("정말 로그아웃 하시겠습니까?")) { // ✅ 확인 창 추가
+        localStorage.removeItem("token");
+        alert("로그아웃 되었습니다."); // ✅ 로그아웃 완료 알림
+        router.push("/login");
+      }
     };
+
 
     // 모달 열고 닫기
     const openModifyModal = () => (isModifyModalOpen.value = true);
