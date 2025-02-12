@@ -5,6 +5,7 @@
       <input type="text" v-model="username" placeholder="아이디" required />
       <input type="password" v-model="password" placeholder="비밀번호" required />
       <input type="text" v-model="name" placeholder="이름" required />
+      <input type="text" v-model="email" placeholder="이메일" required />
       <button type="submit">가입하기</button>
     </form>
     <p>이미 계정이 있나요? <router-link to="/login">로그인</router-link></p>
@@ -21,41 +22,79 @@ export default {
     const username = ref("");
     const password = ref("");
     const name = ref("");
+    const email = ref("");
     const router = useRouter();
 
     const signup = async () => {
       try {
-        await axios.post("/signup", {
+        await axios.post("/user/signup", {
           username: username.value,
           password: password.value,
           name: name.value,
+          email: email.value,
         });
         alert("회원가입 성공! 로그인 해주세요.");
         router.push("/login");
       } catch (error) {
-        alert("회원가입 실패: " + error.response?.data?.message || "알 수 없는 오류");
+        alert("회원가입 실패: " + (error.response?.data?.message || "알 수 없는 오류"));
       }
     };
 
-    return { username, password, name, signup };
+    return { username, password, name, email, signup };
   },
 };
 </script>
 
 <style scoped>
 .auth-container {
-  max-width: 300px;
+  max-width: 350px;
   margin: auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
+
+/* 입력 필드 스타일 */
 input {
   display: block;
-  width: 100%;
-  padding: 8px;
-  margin: 10px 0;
+  width: calc(100% - 20px); /* ✅ 버튼과 같은 너비 유지 */
+  padding: 10px;
+  margin: 10px auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; /* ✅ 패딩 포함하여 크기 맞추기 */
 }
+
+/* 버튼 스타일 (민트색 적용) */
 button {
   width: 100%;
   padding: 10px;
+  margin: 10px 0;
+  background-color: #40E0D0; /* ✅ 기본 민트색 */
+  color: black;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  box-sizing: border-box; /* ✅ 패딩 포함하여 크기 맞추기 */
+}
+
+button:hover {
+  background-color: #008B8B; /* ✅ 호버 시 더 짙은 민트색 */
+}
+
+/* 회원가입 링크 스타일 */
+p {
+  margin-top: 10px;
+}
+router-link {
+  color: #40E0D0;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+router-link:hover {
+  text-decoration: underline;
 }
 </style>
