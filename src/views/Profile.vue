@@ -1,47 +1,27 @@
 <template>
-  <div class="profile-container">
+  <div class="container">
     <h2>내 프로필</h2>
     <p><strong>아이디:</strong> {{ username }}</p>
     <p><strong>이메일:</strong> {{ email }}</p>
 
-    <!-- 회원 정보 수정 -->
-    <button @click="openModifyModal">회원 정보 수정</button>
+    <button @click="openModifyModal" class="btn btn-mint">회원 정보 수정</button>
+    <button @click="openPasswordModal" class="btn btn-mint">비밀번호 변경</button>
+    <button @click="withdraw" class="btn btn-mint">회원 탈퇴</button>
+    <button @click="logout" class="btn btn-mint">로그아웃</button>
 
-    <!-- 비밀번호 수정 -->
-    <button @click="openPasswordModal">비밀번호 변경</button>
-
-    <!-- 회원 탈퇴 -->
-    <button @click="withdraw">회원 탈퇴</button>
-
-    <!-- 로그아웃 -->
-    <button @click="logout">로그아웃</button>
-
-    <!-- ✅ 내 펫 목록 & 펫 등록 버튼 -->
     <div class="pet-actions">
-      <button @click="goToPetList" class="pet-btn">내 펫 목록 보기</button>
-      <button @click="goToPetRegister" class="pet-btn">펫 등록하기</button>
+      <button @click="goToPetList" class="btn btn-pink">내 펫 목록 보기</button>
+      <button @click="goToPetRegister" class="btn btn-pink">펫 등록하기</button>
     </div>
 
-    <!-- ✅ 회원 정보 수정 모달 -->
     <div v-if="isModifyModalOpen" class="modal">
       <div class="modal-content">
         <h3>회원 정보 수정</h3>
-        <input v-model="modifyEmail" type="email" placeholder="새 이메일 입력" />
-        <button @click="modifyInfo">저장</button>
-        <button @click="closeModifyModal">닫기</button>
+        <input v-model="modifyEmail" type="email" placeholder="새 이메일 입력" class="input-field" />
+        <button @click="modifyInfo" class="btn btn-mint">저장</button>
+        <button @click="closeModifyModal" class="btn btn-mint">닫기</button>
       </div>
     </div>
-
-    <!-- ✅ 비밀번호 수정 모달 -->
-    <div v-if="isPasswordModalOpen" class="modal">
-      <div class="modal-content">
-        <h3>비밀번호 변경</h3>
-        <input v-model="modifyPassword" type="password" placeholder="새 비밀번호 입력" />
-        <button @click="modifyPasswordFunc">변경</button>
-        <button @click="closePasswordModal">닫기</button>
-      </div>
-    </div>
-
   </div>
 </template>
 

@@ -1,11 +1,11 @@
 <template>
-  <div class="pet-list-container">
+  <div class="container">
     <h2>내 펫 목록</h2>
 
     <div v-if="pets.length === 0" class="no-pets">
       <p>등록된 펫이 없습니다.</p>
       <router-link to="/pet-register">
-        <button class="pet-btn">펫 등록하기</button>
+        <button class="btn btn-pink">펫 등록하기</button>
       </router-link>
     </div>
 
@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <button @click="goBack" class="back-btn">뒤로 가기</button>
+    <button @click="goBack" class="btn btn-mint">뒤로 가기</button>
   </div>
 </template>
 

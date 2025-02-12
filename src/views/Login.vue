@@ -1,14 +1,15 @@
 <template>
-  <div class="auth-container">
+  <div class="container">
     <h2>로그인</h2>
     <form @submit.prevent="login">
-      <input type="text" v-model="username" placeholder="아이디" required />
-      <input type="password" v-model="password" placeholder="비밀번호" required />
-      <button type="submit">로그인</button>
+      <input type="text" v-model="username" placeholder="아이디" class="input-field" required />
+      <input type="password" v-model="password" placeholder="비밀번호" class="input-field" required />
+      <button type="submit" class="btn btn-mint">로그인</button>
     </form>
     <p>계정이 없나요? <router-link to="/signup">회원가입</router-link></p>
   </div>
 </template>
+
 
 <script>
 import { ref } from "vue";

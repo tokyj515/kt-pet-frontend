@@ -1,12 +1,12 @@
 <template>
-  <div class="auth-container">
+  <div class="container">
     <h2>회원가입</h2>
     <form @submit.prevent="signup">
-      <input type="text" v-model="username" placeholder="아이디" required />
-      <input type="password" v-model="password" placeholder="비밀번호" required />
-      <input type="text" v-model="name" placeholder="이름" required />
-      <input type="text" v-model="email" placeholder="이메일" required />
-      <button type="submit">가입하기</button>
+      <input type="text" v-model="username" placeholder="아이디" class="input-field" required />
+      <input type="password" v-model="password" placeholder="비밀번호" class="input-field" required />
+      <input type="text" v-model="name" placeholder="이름" class="input-field" required />
+      <input type="text" v-model="email" placeholder="이메일" class="input-field" required />
+      <button type="submit" class="btn btn-mint">가입하기</button>
     </form>
     <p>이미 계정이 있나요? <router-link to="/login">로그인</router-link></p>
   </div>

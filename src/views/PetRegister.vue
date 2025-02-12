@@ -1,17 +1,17 @@
 <template>
-  <div class="pet-register-container">
+  <div class="container">
     <h2>펫 등록</h2>
     <form @submit.prevent="registerPet">
       <!-- ✅ 이름 입력 (한 줄 배치) -->
       <div class="input-group">
         <label for="name">이름</label>
-        <input type="text" id="name" v-model="name" placeholder="펫 이름" required />
+        <input type="text" id="name" v-model="name" placeholder="펫 이름" class="input-field" required />
       </div>
 
       <!-- ✅ 펫 종류 선택 (한 줄 배치) -->
       <div class="input-group">
         <label for="petType">펫 종류</label>
-        <select id="petType" v-model="petType" required>
+        <select id="petType" v-model="petType" class="input-field" required>
           <option value="고양이">고양이</option>
           <option value="강아지">강아지</option>
         </select>
@@ -20,15 +20,15 @@
       <!-- ✅ 나이 선택 (한 줄 배치) -->
       <div class="input-group">
         <label for="age">나이</label>
-        <select id="age" v-model="age" required>
+        <select id="age" v-model="age" class="input-field" required>
           <option v-for="i in 31" :key="i" :value="i-1">{{ i-1 }}살</option>
         </select>
       </div>
 
       <!-- 등록 버튼 -->
-      <button type="submit" class="pet-btn">등록하기</button>
+      <button type="submit" class="btn btn-pink">등록하기</button>
     </form>
-    <button @click="goBack" class="pet-btn">취소</button>
+    <button @click="goBack" class="btn btn-pink">취소</button>
   </div>
 </template>
 
