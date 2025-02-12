@@ -24,7 +24,7 @@ export default {
     const login = async () => {
       try {
         console.log("🟡 로그인 요청 시작:", username.value, password.value);
-        const response = await axios.post("/login", {
+        const response = await axios.post("/user/login", {
           username: username.value,
           password: password.value,
         });

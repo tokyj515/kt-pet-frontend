@@ -2,6 +2,7 @@
   <div class="profile-container">
     <h2>내 프로필</h2>
     <p><strong>아이디:</strong> {{ username }}</p>
+    <p><strong>이메일:</strong> {{ email }}</p>
     <button @click="logout">로그아웃</button>
   </div>
 </template>
@@ -14,6 +15,7 @@ import axios from "@/api/axios.js";
 export default {
   setup() {
     const username = ref("");
+    const email = ref("");
     const router = useRouter();
 
     const fetchUserInfo = async () => {
@@ -27,12 +29,13 @@ export default {
         }
 
         console.log("🟡 사용자 정보 요청 시작");
-        const response = await axios.get("/now/user", {
+        const response = await axios.get("/user/profile", {
           headers: { Authorization: `Bearer ${token}` }, // ✅ 토큰 포함해서 요청
         });
 
         console.log("✅ 응답 데이터:", response.data);
-        username.value = response.data.data;
+        username.value = response.data.data.username;
+        email.value = response.data.data.email;
       } catch (error) {
         console.error("❌ 사용자 정보를 불러오지 못함:", error.response?.data || error.message);
         alert("사용자 정보를 불러올 수 없습니다.");
@@ -49,7 +52,7 @@ export default {
 
     onMounted(fetchUserInfo);
 
-    return { username, logout };
+    return { username, email, logout };
   },
 };
 </script>
