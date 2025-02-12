@@ -187,14 +187,14 @@ button {
   width: 100%;
   padding: 10px;
   margin: 5px 0;
-  background-color: #007bff;
-  color: white;
+  background-color: #40e0d0;
+  color: black;
   border: none;
   cursor: pointer;
   border-radius: 5px;
 }
 button:hover {
-  background-color: #0056b3;
+  background-color: #008b8b;
 }
 
 /* 모달 스타일 */
