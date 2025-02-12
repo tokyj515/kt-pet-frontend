@@ -16,8 +16,11 @@
     <!-- 로그아웃 -->
     <button @click="logout">로그아웃</button>
 
-    <!-- ✅ 펫 등록 페이지로 이동하는 버튼 -->
-    <button @click="goToPetRegister" class="pet-btn">펫 등록하기</button>
+    <!-- ✅ 내 펫 목록 & 펫 등록 버튼 -->
+    <div class="pet-actions">
+      <button @click="goToPetList" class="pet-btn">내 펫 목록 보기</button>
+      <button @click="goToPetRegister" class="pet-btn">펫 등록하기</button>
+    </div>
 
     <!-- 회원 정보 수정 모달 -->
     <div v-if="isModifyModalOpen" class="modal">
@@ -42,7 +45,7 @@
 </template>
 
 <script>
-import { onMounted, ref, nextTick } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "@/api/axios.js";
 
@@ -52,7 +55,12 @@ export default {
     const email = ref("");
     const router = useRouter();
 
-    // ✅ 펫 등록 페이지로 이동하는 함수
+    // ✅ 내 펫 목록 보기
+    const goToPetList = () => {
+      router.push("/pet-list");
+    };
+
+    // ✅ 펫 등록 페이지로 이동
     const goToPetRegister = () => {
       router.push("/pet-register");
     };
@@ -81,7 +89,7 @@ export default {
 
     onMounted(fetchUserInfo);
 
-    return { username, email, goToPetRegister };
+    return { username, email, goToPetList, goToPetRegister };
   },
 };
 </script>
@@ -93,7 +101,30 @@ export default {
   text-align: center;
 }
 
-/* 기본 버튼 스타일 (민트색) */
+/* ✅ 내 펫 관련 버튼을 묶는 컨테이너 */
+.pet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* ✅ 펫 관련 버튼 (핑크색) */
+button.pet-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #FACCD9; /* ✅ 기본 연한 핑크 */
+  color: black;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button.pet-btn:hover {
+  background-color: #FE80A2; /* ✅ 호버 시 진한 핑크 */
+}
+
+/* 기본 버튼 스타일 (회원정보 관련 버튼 - 민트색 유지) */
 button {
   width: 100%;
   padding: 10px;
@@ -107,53 +138,5 @@ button {
 
 button:hover {
   background-color: #008b8b; /* ✅ 호버 시 짙은 민트색 */
-}
-
-/* ✅ 펫 관련 버튼 스타일 (핑크색) */
-button.pet-btn {
-  background-color: #FACCD9; /* ✅ 기본 연한 핑크 */
-}
-
-button.pet-btn:hover {
-  background-color: #FE80A2; /* ✅ 호버 시 진한 핑크 */
-}
-
-/* 모달 스타일 */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  width: 300px;
-}
-
-/* ✅ 입력창과 버튼 간격 조정 */
-.modal-content input {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin: 10px 0 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  display: block;
-}
-
-/* ✅ 버튼 스타일 조정 */
-.modal-content button {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  font-size: 16px;
 }
 </style>
