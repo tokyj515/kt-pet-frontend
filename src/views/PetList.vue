@@ -29,7 +29,7 @@
 <!--    <button @click="goToPetList" class="btn btn-pink">내 펫 목록 보기</button>-->
     <button @click="goToPetRegister" class="btn btn-pink">펫 등록하기</button>
 
-    <button @click="goBack" class="btn btn-mint">뒤로 가기</button>
+    <button @click="goBack" class="btn back-btn">뒤로 가기</button>
   </div>
 </template>
 

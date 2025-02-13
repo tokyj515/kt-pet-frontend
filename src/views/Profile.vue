@@ -14,16 +14,28 @@
 <!--      <button @click="goToPetRegister" class="btn btn-pink">펫 등록하기</button>-->
 <!--    </div>-->
 
-    <button @click="goBack" class="btn btn-mint">뒤로 가기</button>
+    <button @click="goBack" class="btn back-btn">뒤로 가기</button>
 
+    <!-- ✅ 회원 정보 수정 -->
     <div v-if="isModifyModalOpen" class="modal">
       <div class="modal-content">
         <h3>회원 정보 수정</h3>
         <input v-model="modifyEmail" type="email" placeholder="새 이메일 입력" class="input-field" />
         <button @click="modifyInfo" class="btn btn-mint">저장</button>
-        <button @click="closeModifyModal" class="btn btn-mint">닫기</button>
+        <button @click="closeModifyModal" class="btn back-btn">닫기</button>
       </div>
     </div>
+
+    <!-- ✅ 비밀번호 변경 모달 -->
+    <div v-if="isPasswordModalOpen" class="modal">
+      <div class="modal-content">
+        <h3>비밀번호 변경</h3>
+        <input v-model="modifyPassword" type="password" placeholder="새 비밀번호 입력" class="input-field" />
+        <button @click="modifyPasswordFunc" class="btn btn-mint">변경</button>
+        <button @click="closePasswordModal" class="btn back-btn">닫기</button>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -186,36 +198,7 @@ export default {
   margin-top: 20px;
 }
 
-/* ✅ 펫 관련 버튼 (핑크색) */
-button.pet-btn {
-  width: 100%;
-  padding: 10px;
-  background-color: #FACCD9; /* ✅ 기본 연한 핑크 */
-  color: black;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
 
-button.pet-btn:hover {
-  background-color: #FE80A2; /* ✅ 호버 시 진한 핑크 */
-}
-
-/* ✅ 기본 버튼 스타일 (회원정보 관련 버튼 - 민트색 유지) */
-button {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  background-color: #40e0d0; /* ✅ 기본 민트색 */
-  color: black;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #008b8b; /* ✅ 호버 시 짙은 민트색 */
-}
 
 /* ✅ 모달 스타일 */
 .modal {

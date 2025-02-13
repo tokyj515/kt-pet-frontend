@@ -66,7 +66,7 @@ export default {
 
         console.log("✅ API 응답:", response.data);
         alert("펫 등록 성공!");
-        router.push("/profile");
+        router.push("/pet-list");
       } catch (error) {
         console.error("❌ 펫 등록 실패:", error.response?.data || error.message);
         alert("펫 등록 실패: " + (error.response?.data?.message || "알 수 없는 오류"));
@@ -77,7 +77,7 @@ export default {
 
     // ✅ 취소 버튼 클릭 시 프로필 페이지로 이동
     const goBack = () => {
-      router.push("/profile");
+      router.push("/pet-list");
     };
 
     return { name, petType, age, registerPet, goBack };
@@ -123,20 +123,4 @@ export default {
   box-sizing: border-box;
 }
 
-/* ✅ 펫 관련 버튼 스타일 */
-button.pet-btn {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  background-color: #FACCD9; /* ✅ 기본 연한 핑크 */
-  color: black;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
-button.pet-btn:hover {
-  background-color: #FE80A2; /* ✅ 호버 시 진한 핑크 */
-}
 </style>
