@@ -1,22 +1,33 @@
 <template>
   <div class="container">
     <h2>내 프로필</h2>
-    <p><strong>아이디:</strong> {{ username }}</p>
-    <p><strong>이메일:</strong> {{ email }}</p>
 
-    <button @click="openModifyModal" class="btn btn-mint">회원 정보 수정</button>
-    <button @click="openPasswordModal" class="btn btn-mint">비밀번호 변경</button>
-    <button @click="withdraw" class="btn btn-gray">회원 탈퇴</button>
-    <button @click="logout" class="btn btn-gray">로그아웃</button>
+    <!-- ✅ 프로필 정보 (완전 중앙 정렬) -->
+    <div class="profile-box">
+      <div class="profile-row">
+        <span class="label">아이디</span>
+        <span class="value">{{ username }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="label">이름</span>
+        <span class="value">{{ name }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="label">이메일</span>
+        <span class="value">{{ email }}</span>
+      </div>
+    </div>
 
-<!--    <div class="pet-actions">-->
-<!--      <button @click="goToPetList" class="btn btn-pink">내 펫 목록 보기</button>-->
-<!--      <button @click="goToPetRegister" class="btn btn-pink">펫 등록하기</button>-->
-<!--    </div>-->
+    <!-- ✅ 버튼 그룹 (정렬 개선) -->
+    <div class="button-group">
+      <button @click="openModifyModal" class="btn btn-mint">회원 정보 수정</button>
+      <button @click="openPasswordModal" class="btn btn-mint">비밀번호 변경</button>
+      <button @click="withdraw" class="btn btn-gray">회원 탈퇴</button>
+      <button @click="logout" class="btn btn-gray">로그아웃</button>
+      <button @click="goBack" class="btn btn-gray">뒤로 가기</button>
+    </div>
 
-    <button @click="goBack" class="btn btn-gray">뒤로 가기</button>
-
-    <!-- ✅ 회원 정보 수정 -->
+    <!-- ✅ 회원 정보 수정 모달 -->
     <div v-if="isModifyModalOpen" class="modal">
       <div class="modal-content">
         <h3>회원 정보 수정</h3>
@@ -35,7 +46,6 @@
         <button @click="closePasswordModal" class="btn btn-gray">닫기</button>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -47,40 +57,28 @@ import axios from "@/api/axios.js";
 export default {
   setup() {
     const username = ref("");
+    const name = ref("");
     const email = ref("");
-    const modifyEmail = ref(""); // 이메일 수정용
-    const modifyPassword = ref(""); // 비밀번호 수정용
+    const modifyEmail = ref("");
+    const modifyPassword = ref("");
     const isModifyModalOpen = ref(false);
     const isPasswordModalOpen = ref(false);
     const router = useRouter();
-
-    // ✅ 내 펫 목록 보기
-    const goToPetList = () => {
-      router.push("/pet-list");
-    };
-
-    // ✅ 펫 등록 페이지로 이동
-    const goToPetRegister = () => {
-      router.push("/pet-register");
-    };
 
     // ✅ 뒤로 가기
     const goBack = () => {
       router.push("/");
     };
 
-
-    // ✅ 회원정보 수정
+    // ✅ 회원 정보 수정
     const modifyInfo = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.patch(
-            "/user/modify",
-            { email: modifyEmail.value },
-            { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
-        );
+        await axios.patch("/user/modify", { email: modifyEmail.value }, {
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
+        });
         alert("회원 정보가 수정되었습니다.");
-        email.value = modifyEmail.value; // UI 업데이트
+        email.value = modifyEmail.value;
         closeModifyModal();
       } catch (error) {
         alert("회원 정보 수정에 실패했습니다.");
@@ -91,11 +89,9 @@ export default {
     const modifyPasswordFunc = async () => {
       try {
         const token = localStorage.getItem("token");
-        await axios.patch(
-            "/user/modify",
-            { newPassword: modifyPassword.value },
-            { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
-        );
+        await axios.patch("/user/modify", { newPassword: modifyPassword.value }, {
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
+        });
         alert("비밀번호가 변경되었습니다.");
         closePasswordModal();
       } catch (error) {
@@ -106,9 +102,7 @@ export default {
     // ✅ 회원 탈퇴
     const withdraw = async () => {
       try {
-        const confirmWithdraw = confirm("정말 회원 탈퇴를 진행하시겠습니까?");
-        if (!confirmWithdraw) return;
-
+        if (!confirm("정말 회원 탈퇴를 진행하시겠습니까?")) return;
         const token = localStorage.getItem("token");
         await axios.patch("/user/withdraw", null, {
           headers: { Authorization: `Bearer ${token}` },
@@ -151,6 +145,7 @@ export default {
         });
 
         username.value = response.data.data.username;
+        name.value = response.data.data.name;
         email.value = response.data.data.email;
       } catch (error) {
         alert("사용자 정보를 불러올 수 없습니다.");
@@ -162,14 +157,13 @@ export default {
 
     return {
       username,
+      name,
       email,
       modifyEmail,
       modifyPassword,
       isModifyModalOpen,
       isPasswordModalOpen,
       goBack,
-      goToPetList,
-      goToPetRegister,
       modifyInfo,
       modifyPasswordFunc,
       withdraw,
@@ -184,21 +178,45 @@ export default {
 </script>
 
 <style scoped>
-.profile-container {
-  max-width: 400px;
+/* ✅ 프로필 박스 (너비 조정 & 중앙 정렬) */
+.profile-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 80%; /* ✅ 너비 조정 (기존 100% → 80%) */
+  max-width: 350px; /* ✅ 최대 너비 제한 */
   margin: auto;
-  text-align: center;
+  text-align: left; /* ✅ 텍스트 정렬 */
 }
 
-/* ✅ 내 펫 관련 버튼을 묶는 컨테이너 */
-.pet-actions {
+/* ✅ 프로필 정보 행 */
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  font-size: 16px;
+}
+
+/* ✅ 라벨 스타일 */
+.label {
+  font-weight: bold;
+  color: #333;
+}
+
+/* ✅ 값 스타일 */
+.value {
+  color: #000;
+  text-align: right;
+  flex: 1; /* ✅ 오른쪽 정렬 */
+}
+
+/* ✅ 버튼 그룹 */
+.button-group {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  align-items: center;
   margin-top: 20px;
 }
-
-
-
-
 </style>

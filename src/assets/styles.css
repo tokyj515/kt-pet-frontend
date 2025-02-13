@@ -118,9 +118,9 @@ input {
 
 /* ✅ 입력 필드 및 셀렉트 박스 스타일 */
 .input-field {
-    width: 90%; /* ✅ 모든 필드 동일한 너비 설정 */
+    width: 80%; /* ✅ 모든 필드 동일한 너비 설정 */
     padding: 10px;
-    margin: 8px auto;
+    margin: 13px auto;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
