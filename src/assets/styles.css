@@ -106,23 +106,47 @@ input {
 }
 
 /* ✅ 통일된 입력 필드 스타일 */
-.modal-content input {
-    display: block;
-    width: calc(100% - 20px);
+/* ✅ 모달 스타일 */
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 320px; /* ✅ 모달 크기 일정하게 조정 */
+    box-sizing: border-box;
+}
+
+/* ✅ 입력 필드 및 셀렉트 박스 스타일 */
+.input-field {
+    width: 90%; /* ✅ 모든 필드 동일한 너비 설정 */
     padding: 10px;
-    margin: 10px auto; /* 가운데 정렬 */
+    margin: 8px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: block;
+}
+
+/* ✅ 모달 내부 input 필드 스타일 통일 */
+.modal-content input {
+    width: 90%; /* ✅ 다른 입력 필드와 동일한 너비 */
+    padding: 10px;
+    margin: 8px auto;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
     text-align: center;
 }
 
-/* ✅ 버튼 스타일 통일 */
+/* ✅ 버튼 스타일 */
 .modal-content button {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
+    width: 90%; /* ✅ 입력 필드와 동일한 너비 */
+    padding: 12px;
+    margin: 8px auto;
     font-size: 16px;
+    text-align: center;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
 /* ✅ 입력 그룹 스타일 */

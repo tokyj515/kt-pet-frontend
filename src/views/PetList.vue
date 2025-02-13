@@ -70,36 +70,48 @@ export default {
     const isEditModalOpen = ref(false);
     const editPet = ref({ petId: null, name: "", petType: "", age: "" });
 
+    // ✅ 펫 목록 불러오기
     const fetchPets = async () => {
       try {
+        console.log("🔄 펫 목록 새로고침 실행됨");
         const token = localStorage.getItem("token");
         const response = await axios.get("/pet/list", {
           headers: { Authorization: `Bearer ${token}` },
         });
+
+        console.log("📌 최신 펫 목록 데이터:", response.data.data);
         pets.value = response.data.data;
       } catch (error) {
-        alert("펫 목록을 불러오는 데 실패했습니다.");
+        console.error("❌ 펫 목록 불러오기 실패:", error.response?.data || error.message);
       }
     };
 
+    // ✅ 펫 상세 보기
     const viewPetDetail = (petId) => {
       router.push(`/pet/${petId}`);
     };
 
+    // ✅ 수정 모달 열기
     const openEditModal = (pet) => {
-      editPet.value = { ...pet }; // 선택한 펫 정보 저장
+      console.log("🟡 선택한 펫 정보:", pet);
+      if (!pet.petId) {
+        alert("펫 ID가 없습니다. 다시 시도해주세요.");
+        return;
+      }
+      editPet.value = { ...pet };
       isEditModalOpen.value = true;
     };
 
+    // ✅ 수정 모달 닫기
     const closeEditModal = () => {
       isEditModalOpen.value = false;
     };
 
+    // ✅ 펫 정보 수정
     const updatePet = async () => {
       try {
         const token = localStorage.getItem("token");
 
-        // ✅ PetModifyDto의 구조를 맞춰서 요청 데이터 생성
         const petModifyDto = {
           petId: editPet.value.petId,
           name: editPet.value.name,
@@ -107,20 +119,29 @@ export default {
           age: editPet.value.age,
         };
 
-        // ✅ API 호출 (PATCH 요청)
+        console.log("🔵 수정 요청 데이터:", petModifyDto);
+
         await axios.patch("/pet/modify", petModifyDto, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
+        console.log("🟢 수정 성공 응답");
         alert("펫 정보가 수정되었습니다.");
+
+        // ✅ Vue 반응형 상태 직접 업데이트
+        const index = pets.value.findIndex(pet => pet.petId === petModifyDto.petId);
+        if (index !== -1) {
+          pets.value[index] = { ...pets.value[index], ...petModifyDto };
+        }
+
         closeEditModal();
-        fetchPets(); // ✅ 최신 정보 반영
       } catch (error) {
+        console.error("🔴 수정 실패:", error.response?.data || error.message);
         alert("펫 정보 수정에 실패했습니다.");
       }
     };
 
-
+    // ✅ 펫 삭제
     const deletePet = async (petId) => {
       if (confirm("정말 삭제하시겠습니까?")) {
         try {
@@ -202,36 +223,4 @@ export default {
   color: #008b8b;
 }
 
-/* ✅ 모달 스타일 */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  width: 300px;
-}
-
-/* ✅ 입력 필드 스타일 */
-.input-field {
-  display: block;
-  width: 80%;
-  padding: 10px;
-  margin: 10px auto;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
 </style>
