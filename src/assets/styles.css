@@ -60,6 +60,22 @@
     background-color: #E18A5C;
 }
 
+/* ✅ 뒤로 가기 버튼 (민트색) */
+.back-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #d4e2e2;
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.back-btn:hover {
+    background-color: #838787;
+}
+
 
 /* ✅ 모달 스타일 */
 .modal {

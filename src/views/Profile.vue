@@ -9,10 +9,12 @@
     <button @click="withdraw" class="btn btn-mint">회원 탈퇴</button>
     <button @click="logout" class="btn btn-mint">로그아웃</button>
 
-    <div class="pet-actions">
-      <button @click="goToPetList" class="btn btn-pink">내 펫 목록 보기</button>
-      <button @click="goToPetRegister" class="btn btn-pink">펫 등록하기</button>
-    </div>
+<!--    <div class="pet-actions">-->
+<!--      <button @click="goToPetList" class="btn btn-pink">내 펫 목록 보기</button>-->
+<!--      <button @click="goToPetRegister" class="btn btn-pink">펫 등록하기</button>-->
+<!--    </div>-->
+
+    <button @click="goBack" class="btn btn-mint">뒤로 가기</button>
 
     <div v-if="isModifyModalOpen" class="modal">
       <div class="modal-content">
@@ -49,6 +51,12 @@ export default {
     const goToPetRegister = () => {
       router.push("/pet-register");
     };
+
+    // ✅ 뒤로 가기
+    const goBack = () => {
+      router.push("/");
+    };
+
 
     // ✅ 회원정보 수정
     const modifyInfo = async () => {
@@ -147,6 +155,7 @@ export default {
       modifyPassword,
       isModifyModalOpen,
       isPasswordModalOpen,
+      goBack,
       goToPetList,
       goToPetRegister,
       modifyInfo,

@@ -25,6 +25,10 @@
       </div>
     </div>
 
+
+<!--    <button @click="goToPetList" class="btn btn-pink">내 펫 목록 보기</button>-->
+    <button @click="goToPetRegister" class="btn btn-pink">펫 등록하기</button>
+
     <button @click="goBack" class="btn btn-mint">뒤로 가기</button>
   </div>
 </template>
@@ -61,12 +65,17 @@ export default {
 
     // ✅ 뒤로 가기
     const goBack = () => {
-      router.push("/profile");
+      router.push("/");
+    };
+
+    // ✅ 펫 등록 페이지로 이동
+    const goToPetRegister = () => {
+      router.push("/pet-register");
     };
 
     onMounted(fetchPetList);
 
-    return { pets, goBack, defaultImage };
+    return { pets, goBack, goToPetRegister, defaultImage };
   },
 };
 </script>
@@ -109,37 +118,6 @@ export default {
   flex: 1;
 }
 
-/* ✅ 펫 관련 버튼 (핑크색) */
-.pet-btn {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  background-color: #FACCD9;
-  color: black;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.pet-btn:hover {
-  background-color: #FE80A2;
-}
-
-/* ✅ 뒤로 가기 버튼 (민트색) */
-.back-btn {
-  width: 100%;
-  padding: 10px;
-  margin-top: 20px;
-  background-color: #40E0D0;
-  color: black;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.back-btn:hover {
-  background-color: #008B8B;
-}
 
 /* ✅ 등록된 펫이 없을 때 */
 .no-pets {
