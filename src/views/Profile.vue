@@ -200,44 +200,5 @@ export default {
 
 
 
-/* ✅ 모달 스타일 */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  width: 300px;
-}
-
-/* ✅ 통일된 입력 필드 스타일 */
-.modal-content input {
-  display: block;
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin: 10px auto; /* 가운데 정렬 */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-/* ✅ 버튼 스타일 통일 */
-.modal-content button {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  font-size: 16px;
-}
 </style>

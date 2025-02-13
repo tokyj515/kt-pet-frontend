@@ -91,27 +91,7 @@ export default {
   text-align: center;
 }
 
-/* ✅ 카드 레이아웃 (이미지 + 정보) */
-.pet-card {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: left;
-  gap: 30px; /* 이미지와 정보 간격 */
-}
 
-/* ✅ 왼쪽: 정사각형 이미지 */
-.pet-image img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 10px; /* 둥글게 */
-  border: 1px solid #ddd;
-}
 
 /* ✅ 오른쪽: 펫 정보 */
 .pet-info {

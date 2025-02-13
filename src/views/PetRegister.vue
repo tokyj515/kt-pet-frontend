@@ -96,31 +96,5 @@ export default {
   text-align: center;
 }
 
-/* ✅ 입력 필드와 라벨을 같은 줄에 배치 */
-.input-group {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* 요소 간 간격 유지 */
-  margin-bottom: 10px;
-}
-
-/* ✅ 레이블 스타일 */
-.input-group label {
-  flex: 1; /* 레이블이 일정한 비율로 차지 */
-  text-align: left;
-  font-size: 14px;
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-/* ✅ 입력 필드와 셀렉트 박스 스타일 */
-.input-group input,
-.input-group select {
-  flex: 2; /* 입력 필드가 더 넓게 차지 */
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
 
 </style>
