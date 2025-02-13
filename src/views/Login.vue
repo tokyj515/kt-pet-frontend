@@ -78,17 +78,6 @@ export default {
   text-align: center;
 }
 
-/* 입력 필드 스타일 */
-input {
-  display: block;
-  width: 80%; /* ✅ 버튼과 같은 너비 유지 */
-  padding: 10px;
-  margin: 10px auto;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box; /* ✅ 패딩 포함하여 크기 맞추기 */
-}
-
 
 
 /* 회원가입 링크 스타일 */

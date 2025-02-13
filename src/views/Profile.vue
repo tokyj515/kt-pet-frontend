@@ -6,15 +6,15 @@
 
     <button @click="openModifyModal" class="btn btn-mint">회원 정보 수정</button>
     <button @click="openPasswordModal" class="btn btn-mint">비밀번호 변경</button>
-    <button @click="withdraw" class="btn btn-mint">회원 탈퇴</button>
-    <button @click="logout" class="btn btn-mint">로그아웃</button>
+    <button @click="withdraw" class="btn btn-gray">회원 탈퇴</button>
+    <button @click="logout" class="btn btn-gray">로그아웃</button>
 
 <!--    <div class="pet-actions">-->
 <!--      <button @click="goToPetList" class="btn btn-pink">내 펫 목록 보기</button>-->
 <!--      <button @click="goToPetRegister" class="btn btn-pink">펫 등록하기</button>-->
 <!--    </div>-->
 
-    <button @click="goBack" class="btn back-btn">뒤로 가기</button>
+    <button @click="goBack" class="btn btn-gray">뒤로 가기</button>
 
     <!-- ✅ 회원 정보 수정 -->
     <div v-if="isModifyModalOpen" class="modal">
@@ -22,7 +22,7 @@
         <h3>회원 정보 수정</h3>
         <input v-model="modifyEmail" type="email" placeholder="새 이메일 입력" class="input-field" />
         <button @click="modifyInfo" class="btn btn-mint">저장</button>
-        <button @click="closeModifyModal" class="btn back-btn">닫기</button>
+        <button @click="closeModifyModal" class="btn btn-gray">닫기</button>
       </div>
     </div>
 
@@ -32,7 +32,7 @@
         <h3>비밀번호 변경</h3>
         <input v-model="modifyPassword" type="password" placeholder="새 비밀번호 입력" class="input-field" />
         <button @click="modifyPasswordFunc" class="btn btn-mint">변경</button>
-        <button @click="closePasswordModal" class="btn back-btn">닫기</button>
+        <button @click="closePasswordModal" class="btn btn-gray">닫기</button>
       </div>
     </div>
 

@@ -28,7 +28,7 @@
       <!-- 등록 버튼 -->
       <button type="submit" class="btn btn-pink">등록하기</button>
     </form>
-    <button @click="goBack" class="btn btn-pink">취소</button>
+    <button @click="goBack" class="btn btn-gray">취소</button>
   </div>
 </template>
 

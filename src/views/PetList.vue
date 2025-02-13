@@ -4,9 +4,6 @@
 
     <div v-if="pets.length === 0" class="no-pets">
       <p>등록된 펫이 없습니다.</p>
-      <router-link to="/pet-register">
-        <button class="btn btn-pink">펫 등록하기</button>
-      </router-link>
     </div>
 
     <div v-else class="pet-cards">
@@ -29,7 +26,7 @@
 <!--    <button @click="goToPetList" class="btn btn-pink">내 펫 목록 보기</button>-->
     <button @click="goToPetRegister" class="btn btn-pink">펫 등록하기</button>
 
-    <button @click="goBack" class="btn back-btn">뒤로 가기</button>
+    <button @click="goBack" class="btn btn-gray">뒤로 가기</button>
   </div>
 </template>
 
