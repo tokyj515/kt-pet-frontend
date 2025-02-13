@@ -11,6 +11,18 @@
     text-align: center;
 }
 
+/* 입력 필드 스타일 */
+input {
+    display: block;
+    width: 80%; /* ✅ 버튼과 같은 너비 유지 */
+    padding: 10px;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* ✅ 패딩 포함하여 크기 맞추기 */
+}
+
+
 /* ✅ 입력 필드 스타일 */
 .input-field {
     display: block;
@@ -24,7 +36,7 @@
 
 /* ✅ 기본 버튼 스타일 */
 .btn {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     margin: 10px 0;
     border: none;
@@ -64,7 +76,7 @@
 
 /* ✅ 뒤로 가기 버튼 (민트색) */
 .back-btn {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     margin-top: 20px;
     background-color: #d4e2e2;

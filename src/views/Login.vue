@@ -81,7 +81,7 @@ export default {
 /* 입력 필드 스타일 */
 input {
   display: block;
-  width: calc(100% - 20px); /* ✅ 버튼과 같은 너비 유지 */
+  width: 80%; /* ✅ 버튼과 같은 너비 유지 */
   padding: 10px;
   margin: 10px auto;
   border: 1px solid #ccc;
@@ -89,22 +89,7 @@ input {
   box-sizing: border-box; /* ✅ 패딩 포함하여 크기 맞추기 */
 }
 
-/* 버튼 스타일 */
-button {
-  width: 100%; /* ✅ 버튼도 동일한 너비 */
-  padding: 10px;
-  margin: 10px 0;
-  background-color: #40E0D0; /* ✅ 기본 민트색 */
-  color: black;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  box-sizing: border-box; /* ✅ 패딩 포함하여 크기 맞추기 */
-}
 
-button:hover {
-  background-color: #008B8B; /* ✅ 호버 시 더 짙은 민트색 */
-}
 
 /* 회원가입 링크 스타일 */
 p {
