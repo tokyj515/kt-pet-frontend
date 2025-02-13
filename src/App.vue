@@ -1,14 +1,13 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import Navbar from './components/Navbar.vue'; // ✅ 네비바 컴포넌트 추가
 </script>
 
 <template>
   <div>
+    <Navbar /> <!-- ✅ 네비게이션 바 추가 -->
     <router-view /> <!-- ✅ 현재 페이지를 렌더링하는 필수 태그 -->
   </div>
 </template>
-
 
 <style scoped>
 header {

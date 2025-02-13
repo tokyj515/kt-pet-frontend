@@ -45,7 +45,7 @@ export default {
           localStorage.setItem("username", response.data.data.username);
           localStorage.setItem("email", response.data.data.username);
           console.log("✅ 토큰 및 사용자 정보 저장 완료:", token);
-          router.push("/profile");
+          router.push("/");
         } else {
           console.error("❌ accessToken이 응답 데이터에서 확인되지 않음:", response.data);
           alert("로그인 실패: 서버 응답에서 accessToken을 찾을 수 없습니다.");
@@ -53,7 +53,7 @@ export default {
 
         // ✅ localStorage 반영 후 프로필로 이동 (setTimeout 활용)
         setTimeout(() => {
-          router.push("/profile");
+          router.push("/");
         }, 100); // 약간의 지연 후 페이지 이동
 
       } catch (error) {

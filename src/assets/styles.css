@@ -51,6 +51,15 @@
     background-color: #FE80A2 !important; /* ✅ 호버 시 진한 핑크 */
 }
 
+/* ✅ 오렌지 버튼 (쇼핑몰) */
+.btn-orange {
+    background-color: #FFC58C;
+}
+
+.btn-orange:hover {
+    background-color: #E18A5C;
+}
+
 
 /* ✅ 모달 스타일 */
 .modal {
