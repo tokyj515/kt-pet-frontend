@@ -194,3 +194,24 @@ input {
     font-size: 14px;
     text-align: left;
 }
+
+/* ✅ 뒤로 가기 버튼 컨테이너 */
+.header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+/* ✅ 뒤로 가기 아이콘 (←) */
+.back-button {
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.2s ease-in-out;
+    margin-left: 20px; /* 좌측 여백 조정 */
+}
+
+.back-button:hover {
+    color: #008b8b;
+}
