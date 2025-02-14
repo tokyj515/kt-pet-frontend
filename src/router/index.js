@@ -9,6 +9,7 @@ import Shopping from "@/views/shopping/Shopping.vue";
 import PetInfo from "@/views/pet/PetInfo.vue";
 import SitterRegister from "@/views/sitter/SitterRegister.vue";
 import SitterProfile from "@/views/sitter/SitterProfile.vue"; // ✅ 펫 상세정보 페이지 추가
+import SitterList from "@/views/sitter/SitterList.vue";  // 추가
 
 const routes = [
     { path: "/", component: Main },
@@ -21,6 +22,7 @@ const routes = [
     { path: "/pet/:petId", component: PetInfo }, // ✅ 동적 라우트 추가
     { path: "/sitter-register", component: SitterRegister }, // ✅ 동적 라우트 추가
     { path: "/sitter-profile", component: SitterProfile },
+    { path: "/sitter-list", component: SitterList },
 ];
 
 const router = createRouter({
