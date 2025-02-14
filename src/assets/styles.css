@@ -11,41 +11,56 @@
     text-align: center;
 }
 
-/* 입력 필드 스타일 */
-input {
-    display: block;
-    width: 80%; /* ✅ 버튼과 같은 너비 유지 */
-    padding: 10px;
-    margin: 10px auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box; /* ✅ 패딩 포함하여 크기 맞추기 */
-}
-
-
-/* ✅ 입력 필드 스타일 */
-.input-field {
-    display: block;
-    width: 70%;
+/* ✅ 전체 입력 필드 스타일 통일 */
+.input-field,
+.input-group input,
+.input-group select {
+    width: 80%; /* ✅ 모든 입력 필드 동일한 너비 설정 */
     padding: 10px;
     margin: 10px auto;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
+    display: block;
 }
 
-/* ✅ 기본 버튼 스타일 */
+/* ✅ 가로 정렬을 위한 input-group 스타일 */
+.input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* ✅ 양쪽 정렬 */
+    gap: 10px;
+    width: 100%;
+    margin: 8px 0;
+}
+
+/* ✅ 라벨과 입력 필드 정렬 */
+.input-group label {
+    width: 120px; /* ✅ 레이블 너비 고정 */
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* ✅ input-group 내부 입력 필드 스타일 */
+.input-group input,
+.input-group select {
+    flex: 1; /* ✅ 남은 공간 차지 */
+    min-width: 200px; /* ✅ 최소 너비 설정 */
+}
+
+/* ✅ 버튼 크기도 입력 필드와 동일하게 설정 */
 .btn {
-    width: 70%;
+    width: 80%;
     padding: 10px;
-    margin: 10px 0;
+    margin: 10px auto;
     border: none;
     cursor: pointer;
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 14px;
 }
-
 /* ✅ 민트색 버튼 (회원 관련 기능) */
 .btn-mint {
     background-color: #40e0d0;
