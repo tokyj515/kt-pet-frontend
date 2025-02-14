@@ -1,6 +1,6 @@
 /* ✅ 전체 레이아웃 스타일 */
 .container {
-    max-width: 500px; /* ✅ 기존 400px → 600px으로 넓힘 */
+    max-width: 600px; /* ✅ 기존 400px → 600px으로 넓힘 */
     max-height: 80vh; /* ✅ 높이 제한 */
     overflow-y: auto; /* ✅ 세로 스크롤 활성화 */
     margin: auto;
