@@ -16,7 +16,13 @@
     <!-- ✅ 요금 입력 -->
     <div class="input-group">
       <label>요금</label>
-      <input v-model="sitterData.charge" type="text" placeholder="요금을 입력하세요" class="input-field" />
+      <input 
+        v-model="sitterData.charge" 
+        type="number" 
+        placeholder="요금을 입력하세요" 
+        class="input-field"
+        min="0"
+      />
     </div>
 
     <!-- ✅ 돌봄 가능 동물 선택 -->
@@ -87,6 +93,7 @@
 
 <script>
 import { ref } from "vue";
+import axios from "axios";
 
 export default {
   setup() {
@@ -136,6 +143,50 @@ export default {
       isModalOpen.value = false;
     };
 
+    const registerSitter = async () => {
+      try {
+        // 입력값 검증
+        if (!sitterData.value.location) {
+          alert("위치를 선택해주세요.");
+          return;
+        }
+        if (!sitterData.value.charge) {
+          alert("요금을 입력해주세요.");
+          return;
+        }
+        if (sitterData.value.carePetList.length === 0) {
+          alert("돌봄 가능한 동물을 선택해주세요.");
+          return;
+        }
+        if (!sitterData.value.careTimeList.some(time => time.startTime && time.endTime)) {
+          alert("돌봄 가능 시간을 최소 1개 이상 선택해주세요.");
+          return;
+        }
+
+        const response = await axios.post('/sitter/register', {
+          location: sitterData.value.location,
+          charge: Number(sitterData.value.charge),
+          carePetList: sitterData.value.carePetList,
+          careTimeList: sitterData.value.careTimeList
+            .filter(time => time.startTime && time.endTime)
+            .map(time => ({
+              day: time.day,
+              startTime: time.startTime,
+              endTime: time.endTime
+            }))
+        });
+
+        if (response.data.success) {
+          alert("시터 등록이 완료되었습니다.");
+          // 등록 성공 후 이동할 페이지로 라우팅
+          // router.push('/some-path');  // 필요한 경우 주석 해제 후 경로 지정
+        }
+      } catch (error) {
+        console.error('시터 등록 실패:', error);
+        alert(error.response?.data?.message || "시터 등록에 실패했습니다.");
+      }
+    };
+
     return {
       sitterData,
       locations,
@@ -149,6 +200,7 @@ export default {
       openModal,
       saveTime,
       closeModal,
+      registerSitter,
     };
   },
 };
