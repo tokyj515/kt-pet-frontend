@@ -176,8 +176,8 @@ export default {
 }
 
 .day-btn.active {
-  background: #007AFF;  /* 파란색으로 변경 */
-  border-color: #007AFF;
+  background: #8DA9FF;  /* 파란색으로 변경 */
+  border-color: #8DA9FF;
   color: white;
 }
 
@@ -216,6 +216,7 @@ export default {
   align-items: center;
   padding: 4px 12px;
   background-color: #FFB6C1;  /* 연핑크색 */
+  color: white;
   border-radius: 20px;
   font-size: 14px;
   color: #333;
