@@ -54,34 +54,54 @@ input {
 
 .btn-mint:hover {
     background-color: #008b8b;
+    color: white;
 }
 
 /* ✅ 핑크색 버튼 (펫 관련 기능) */
 .btn-pink {
     background-color: #FACCD9 !important; /* ✅ 기본 연한 핑크 */
+    color: black;
+
 }
 
 .btn-pink:hover {
     background-color: #FE80A2 !important; /* ✅ 호버 시 진한 핑크 */
+    color: white;
 }
 
 /* ✅ 오렌지 버튼 (쇼핑몰) */
 .btn-orange {
+    color: black;
     background-color: #FFC58C;
 }
 
 .btn-orange:hover {
     background-color: #E18A5C;
+    color: white;
 }
 
 /* ✅ 기본 버튼*/
 .btn-gray {
+    color: black;
     background-color: #d4e2e2 !important; /* ✅ 기본 연한 핑크 */
 }
 
 .btn-gray:hover {
     background-color: #838787 !important; /* ✅ 호버 시 진한 핑크 */
+    color: white;
 }
+
+/* ✅ 파란 버튼 (펫시터 관리) */
+.btn-blue {
+    color: black;
+    background-color: #8DA9FF !important;
+}
+
+.btn-blue:hover {
+    background-color: #2b355a !important;
+    color: white;
+}
+
 
 
 /* ✅ 모달 스타일 */

@@ -16,10 +16,15 @@
         <span class="label">이메일</span>
         <span class="value">{{ email }}</span>
       </div>
+      <div class="profile-row">
+        <span class="label">전화번호</span>
+        <span class="value">{{ phone }}</span>
+      </div>
     </div>
 
     <!-- ✅ 버튼 그룹 (정렬 개선) -->
     <div class="button-group">
+      <button @click="goToSitterRegister" class="btn btn-blue">펫시터로 등록하기</button>
       <button @click="openModifyModal" class="btn btn-mint">회원 정보 수정</button>
       <button @click="openPasswordModal" class="btn btn-mint">비밀번호 변경</button>
       <button @click="withdraw" class="btn btn-gray">회원 탈퇴</button>
@@ -59,11 +64,17 @@ export default {
     const username = ref("");
     const name = ref("");
     const email = ref("");
+    const phone = ref("");
     const modifyEmail = ref("");
     const modifyPassword = ref("");
     const isModifyModalOpen = ref(false);
     const isPasswordModalOpen = ref(false);
     const router = useRouter();
+
+    // ✅ 펫시터 등록 페이지로 이동
+    const goToSitterRegister = () => {
+      router.push("/sitter-register");
+    };
 
     // ✅ 뒤로 가기
     const goBack = () => {
@@ -147,6 +158,7 @@ export default {
         username.value = response.data.data.username;
         name.value = response.data.data.name;
         email.value = response.data.data.email;
+        phone.value = response.data.data.phone;  // ✅ 전화번호 데이터 추가
       } catch (error) {
         alert("사용자 정보를 불러올 수 없습니다.");
         router.push("/login");
@@ -159,10 +171,12 @@ export default {
       username,
       name,
       email,
+      phone,
       modifyEmail,
       modifyPassword,
       isModifyModalOpen,
       isPasswordModalOpen,
+      goToSitterRegister,
       goBack,
       modifyInfo,
       modifyPasswordFunc,
@@ -184,10 +198,10 @@ export default {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  width: 80%; /* ✅ 너비 조정 (기존 100% → 80%) */
-  max-width: 350px; /* ✅ 최대 너비 제한 */
+  width: 80%;
+  max-width: 350px;
   margin: auto;
-  text-align: left; /* ✅ 텍스트 정렬 */
+  text-align: left;
 }
 
 /* ✅ 프로필 정보 행 */
@@ -208,7 +222,7 @@ export default {
 .value {
   color: #000;
   text-align: right;
-  flex: 1; /* ✅ 오른쪽 정렬 */
+  flex: 1;
 }
 
 /* ✅ 버튼 그룹 */
@@ -219,4 +233,5 @@ export default {
   align-items: center;
   margin-top: 20px;
 }
+
 </style>
