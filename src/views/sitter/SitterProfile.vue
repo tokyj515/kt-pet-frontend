@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2>내 프로필</h2>
+    <h2>시터 프로필</h2>
 
     <!-- ✅ 데이터 로딩 중 -->
     <div v-if="loading" class="loading">
@@ -8,42 +8,87 @@
     </div>
 
     <!-- ✅ 프로필 정보 -->
-    <div v-else class="profile-box">
-      <div class="profile-row">
-        <span class="label">이름</span>
-        <span class="value">{{ profile.name }}</span>
+    <div v-else-if="profile" class="profile-box">
+      <!-- 기본 정보 섹션 -->
+      <div class="section">
+        <h3>기본 정보</h3>
+        <div class="profile-row">
+          <span class="label">이름</span>
+          <span class="value">{{ profile.name || '-' }}</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">이메일</span>
+          <span class="value">{{ profile.email || '-' }}</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">전화번호</span>
+          <span class="value">{{ profile.phone || '미등록' }}</span>
+        </div>
       </div>
-      <div class="profile-row">
-        <span class="label">이메일</span>
-        <span class="value">{{ profile.email }}</span>
+
+      <!-- 시터 정보 섹션 -->
+      <div class="section">
+        <h3>시터 정보</h3>
+        <div class="profile-row">
+          <span class="label">활동 지역</span>
+          <span class="value">{{ profile.location || '-' }}</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">시간당 요금</span>
+          <span class="value">{{ profile.charge ? `${profile.charge}원` : '-' }}</span>
+        </div>
       </div>
-      <div class="profile-row">
-        <span class="label">전화번호</span>
-        <span class="value">{{ profile.phone }}</span>
+
+      <!-- 돌봄 가능 동물 섹션 -->
+      <div class="section">
+        <h3>돌봄 가능 동물</h3>
+        <div class="chips-container">
+          <span v-for="(pet, index) in validCarePetList" 
+                :key="index" 
+                class="chip">
+            {{ pet.petType }}
+          </span>
+        </div>
       </div>
-      <div class="profile-row">
-        <span class="label">위치</span>
-        <span class="value">{{ profile.location }}</span>
+
+      <!-- 돌봄 가능 시간 섹션 -->
+      <div class="section">
+        <h3>돌봄 가능 시간</h3>
+        <div class="time-slots">
+          <div v-for="(time, index) in validCareTimeList" 
+               :key="index" 
+               class="time-slot">
+            <span class="day">{{ time.day }}</span>
+            <span class="time">{{ formatTime(time.startTime) }} - {{ formatTime(time.endTime) }}</span>
+          </div>
+        </div>
       </div>
-      <div class="profile-row">
-        <span class="label">요금</span>
-        <span class="value">{{ profile.charge }}원</span>
-      </div>
+    </div>
+
+    <!-- ✅ 데이터가 없는 경우 -->
+    <div v-else class="no-data">
+      <p>프로필 정보가 없습니다.</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import apiClient from "@/axios"; // axios.js 활용
+import { ref, onMounted, computed } from "vue";
+import axios from 'axios';
 
 const profile = ref({});
 const loading = ref(true);
 
 const fetchProfile = async () => {
   try {
-    const response = await apiClient.get("/sitter/profile");
-    profile.value = response.data;
+    const token = localStorage.getItem('token');
+    const response = await axios.get('http://localhost:8080/sitter/profile', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    // API 응답에서 data 객체 추출
+    profile.value = response.data.data;
   } catch (error) {
     console.error("🚨 프로필 불러오기 실패:", error);
     alert(error.response?.data?.message || "프로필을 불러오지 못했습니다.");
@@ -52,48 +97,151 @@ const fetchProfile = async () => {
   }
 };
 
+// 시간 포맷 함수 추가
+const formatTime = (time) => {
+  if (!time || time === 'string') return '';
+  return time;
+};
+
+// 유효한 시간 데이터만 필터링하는 computed 속성
+const validCareTimeList = computed(() => {
+  return profile.value?.careTimeList?.filter(time => 
+    time.day !== 'string' && 
+    time.startTime !== 'string' && 
+    time.endTime !== 'string'
+  ) || [];
+});
+
+// 유효한 반려동물 데이터만 필터링하는 computed 속성
+const validCarePetList = computed(() => {
+  return profile.value?.carePetList?.filter(pet => 
+    pet.petType !== 'string'
+  ) || [];
+});
+
 // 컴포넌트 마운트 시 API 호출
 onMounted(fetchProfile);
 </script>
 
 <style scoped>
 .container {
-  max-width: 500px;
+  max-width: 600px;
   margin: 50px auto;
+  padding: 0 20px;
+}
+
+h2 {
   text-align: center;
+  color: #333;
+  margin-bottom: 30px;
 }
 
 .profile-box {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.section {
   padding: 20px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  background: #f9f9f9;
+  border-bottom: 1px solid #eee;
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+h3 {
+  color: #2c3e50;
+  font-size: 18px;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #007AFF;
+  display: inline-block;
 }
 
 .profile-row {
   display: flex;
   justify-content: space-between;
-  font-size: 18px;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  padding: 12px 0;
+  font-size: 16px;
 }
 
 .label {
-  font-weight: bold;
-  color: #333;
+  color: #666;
+  font-weight: 500;
 }
 
 .value {
-  color: #555;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  background: #007AFF;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.time-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.time-slot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.day {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.time {
+  color: #666;
 }
 
 .loading {
-  font-size: 18px;
-  color: #777;
   text-align: center;
-  margin-top: 20px;
+  padding: 40px;
+  color: #666;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 20px auto;
+  }
+  
+  .profile-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .time-slot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
 }
 </style>

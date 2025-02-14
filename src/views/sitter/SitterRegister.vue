@@ -189,7 +189,7 @@ export default {
 
         if (response.data.success) {
           alert("시터 등록이 완료되었습니다.");
-          router.push('/profile');  // 필요한 경우 주석 해제 후 경로 지정
+          router.push('/sitter-profile');  // 필요한 경우 주석 해제 후 경로 지정
         }
       } catch (error) {
         console.error('시터 등록 실패:', error);

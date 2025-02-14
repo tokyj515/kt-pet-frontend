@@ -10,6 +10,9 @@
 
     <!-- 쇼핑몰 이동 버튼 -->
     <button @click="goToShopping" class="btn btn-orange">쇼핑몰</button>
+
+    <!-- 펫시터 프로필 이동 버튼 -->
+    <button @click="goToSitterProfile" class="btn btn-blue">펫시터 프로필 보기</button>
   </div>
 </template>
 
@@ -37,7 +40,7 @@ export default {
     };
 
 
-    return { goToProfile, goToPetList, goToShopping };
+    return { goToProfile, goToPetList, goToShopping, goToSitterProfile };
   },
 };
 </script>
