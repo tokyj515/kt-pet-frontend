@@ -22,32 +22,39 @@
     <!-- ✅ 돌봄 가능 동물 선택 -->
     <div class="input-group">
       <label>돌봄 가능 동물</label>
-      <select v-model="selectedPet" class="input-field full-width" @change="addPet">
-        <option value="" disabled>동물을 선택하세요</option>
-        <option v-for="pet in petTypes" :key="pet" :value="pet">{{ pet }}</option>
-      </select>
-      <div class="chip-container">
-        <span v-for="(pet, index) in sitterData.carePetList" :key="index" class="chip">
-          {{ pet }}
-          <i class="fa-solid fa-xmark" @click="removePet(index)"></i>
-        </span>
+      <div class="pet-selection">
+        <select v-model="selectedPet" class="input-field full-width" @change="addPet">
+          <option value="" disabled>동물을 선택하세요</option>
+          <option v-for="pet in petTypes" :key="pet" :value="pet">{{ pet }}</option>
+        </select>
+        <div class="chip-container">
+          <span v-for="(pet, index) in sitterData.carePetList" :key="index" class="chip">
+            {{ pet }}
+            <i class="fa-solid fa-xmark" @click="removePet(index)"></i>
+          </span>
+        </div>
       </div>
     </div>
 
     <!-- ✅ 돌봄 가능 시간 설정 -->
     <div class="input-group">
       <label>돌봄 가능 시간</label>
-      <div class="day-buttons">
-        <button v-for="(time, index) in sitterData.careTimeList" :key="index"
-                :class="['day-btn', time.startTime ? 'active' : '']"
-                @click="openModal(time, index)">
-          {{ time.day }}
-        </button>
-      </div>
-      <div class="selected-times">
-        <div v-for="(time, index) in sitterData.careTimeList.filter(t => t.startTime && t.endTime)"
-             :key="index" class="time-display" @click="openModal(time, index)">
-          {{ time.day }}: {{ time.startTime }} ~ {{ time.endTime }}
+      <div class="care-time-container">
+        <div class="day-buttons">
+          <button v-for="(time, index) in sitterData.careTimeList" :key="index"
+                  :class="['day-btn', time.startTime ? 'active' : '']"
+                  @click="openModal(time, index)">
+            {{ time.day }}
+          </button>
+        </div>
+        <div class="time-chips">
+          <span v-for="(time, index) in sitterData.careTimeList.filter(t => t.startTime && t.endTime)"
+               :key="index" 
+               class="time-chip"
+               @click="openModal(time, index)">
+            {{ time.day }} {{ time.startTime }}~{{ time.endTime }}
+            <i class="fa-solid fa-pen"></i>
+          </span>
         </div>
       </div>
     </div>
@@ -148,6 +155,12 @@ export default {
 </script>
 
 <style scoped>
+.input-group {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
 .day-buttons {
   display: flex;
   gap: 5px;
@@ -163,7 +176,8 @@ export default {
 }
 
 .day-btn.active {
-  background: #40e0d0;
+  background: #007AFF;  /* 파란색으로 변경 */
+  border-color: #007AFF;
   color: white;
 }
 
@@ -177,5 +191,79 @@ export default {
   border: 1px solid #ddd;
   background: #f9f9f9;
   border-radius: 5px;
+}
+
+.pet-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.pet-selection select {
+  width: 100%;
+}
+
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background-color: #FFB6C1;  /* 연핑크색 */
+  border-radius: 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+.chip i {
+  margin-left: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.chip i:hover {
+  opacity: 0.7;
+}
+
+.care-time-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.time-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.time-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background-color: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.time-chip:hover {
+  background-color: #eeeeee;
+}
+
+.time-chip i {
+  margin-left: 6px;
+  font-size: 12px;
+  color: #666;
 }
 </style>
