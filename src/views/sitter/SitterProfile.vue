@@ -7,8 +7,7 @@
       <p>로딩 중...</p>
     </div>
 
-    <!-- ✅ 프로필 정보 -->
-    <div v-else-if="profile" class="profile-box">
+    <template v-else-if="profile">
       <!-- 기본 정보 섹션 -->
       <div class="section">
         <h3>기본 정보</h3>
@@ -63,19 +62,29 @@
           </div>
         </div>
       </div>
-    </div>
+    </template>
 
     <!-- ✅ 데이터가 없는 경우 -->
     <div v-else class="no-data">
       <p>프로필 정보가 없습니다.</p>
     </div>
+
+    <!-- ✅ 뒤로가기 버튼 -->
+    <!-- <div class="back-button-container">
+      <button class="back-button" @click="goToMain">
+        <i class="fa-solid fa-arrow-left"></i> 메인으로
+      </button>
+    </div> -->
+    <button @click="goBack" class="btn btn-gray">뒤로 가기</button>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const profile = ref({});
 const loading = ref(true);
 
@@ -119,37 +128,29 @@ const validCarePetList = computed(() => {
   ) || [];
 });
 
+// 메인 페이지로 이동하는 함수
+const goBack = () => {
+  router.push('/');
+};
+
 // 컴포넌트 마운트 시 API 호출
 onMounted(fetchProfile);
 </script>
 
 <style scoped>
-.container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 0 20px;
-}
-
-h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 30px;
-}
-
-.profile-box {
+.section {
+  padding: 20px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.section {
-  padding: 20px;
-  border-bottom: 1px solid #eee;
+  margin-bottom: 20px;
+  max-width: 400px;  /* 섹션 너비 제한 */
+  margin-left: auto; /* 섹션 중앙 정렬 */
+  margin-right: auto;
 }
 
 .section:last-child {
-  border-bottom: none;
+  margin-bottom: 0;  /* 마지막 섹션은 아래 마진 제거 */
 }
 
 h3 {
