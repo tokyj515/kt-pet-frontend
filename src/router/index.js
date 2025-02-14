@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Main from "@/views/Main.vue";
-import Login from "@/views/Login.vue";
-import Signup from "@/views/Signup.vue";
-import Profile from "@/views/Profile.vue";
-import PetRegister from "@/views/PetRegister.vue";
-import PetList from "@/views/PetList.vue";
-import Shopping from "@/views/Shopping.vue";
-import PetInfo from "@/views/PetInfo.vue";
-import SitterRegister from "@/views/SitterRegister.vue"; // ✅ 펫 상세정보 페이지 추가
+import Login from "@/views/user/Login.vue";
+import Signup from "@/views/user/Signup.vue";
+import Profile from "@/views/user/Profile.vue";
+import PetRegister from "@/views/pet/PetRegister.vue";
+import PetList from "@/views/pet/PetList.vue";
+import Shopping from "@/views/shopping/Shopping.vue";
+import PetInfo from "@/views/pet/PetInfo.vue";
+import SitterRegister from "@/views/sitter/SitterRegister.vue"; // ✅ 펫 상세정보 페이지 추가
 
 const routes = [
     { path: "/", component: Main },

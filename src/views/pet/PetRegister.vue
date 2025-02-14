@@ -34,7 +34,7 @@
 
 <script>
 import { ref } from "vue";
-import axios from "@/api/axios";
+import axios from "@/api/axios.js";
 import { useRouter } from "vue-router";
 
 export default {
