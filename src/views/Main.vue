@@ -32,6 +32,11 @@ export default {
       router.push("/shopping");
     };
 
+    const goToSitterProfile = () => {
+      router.push("/sitter-profile");
+    };
+
+
     return { goToProfile, goToPetList, goToShopping };
   },
 };
