@@ -93,7 +93,8 @@
 
 <script>
 import { ref } from "vue";
-import axios from "axios";
+import axios from "@/api/axios";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
@@ -163,23 +164,32 @@ export default {
           return;
         }
 
-        const response = await axios.post('/sitter/register', {
+        const token = localStorage.getItem("token");
+
+        const requestData = {
           location: sitterData.value.location,
           charge: Number(sitterData.value.charge),
           carePetList: sitterData.value.carePetList,
           careTimeList: sitterData.value.careTimeList
-            .filter(time => time.startTime && time.endTime)
-            .map(time => ({
-              day: time.day,
-              startTime: time.startTime,
-              endTime: time.endTime
-            }))
+              .filter(time => time.startTime && time.endTime)
+              .map(time => ({
+                day: time.day,
+                startTime: time.startTime,
+                endTime: time.endTime
+              }))
+        };
+
+
+        const response = await axios.post('/sitter/register', requestData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
 
         if (response.data.success) {
           alert("시터 등록이 완료되었습니다.");
-          // 등록 성공 후 이동할 페이지로 라우팅
-          // router.push('/some-path');  // 필요한 경우 주석 해제 후 경로 지정
+          router.push('/profile');  // 필요한 경우 주석 해제 후 경로 지정
         }
       } catch (error) {
         console.error('시터 등록 실패:', error);
