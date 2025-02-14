@@ -16,6 +16,8 @@
 
     <!-- 펫시터 목록 이동 버튼 -->
     <button @click="goToSitterList" class="btn btn-green">펫시터 목록 보기</button>
+
+    <button @click="goToPaymentTest" class="btn btn-green">결제하기</button>
   </div>
 </template>
 
@@ -46,8 +48,11 @@ export default {
       router.push("/sitter-list");
     };
 
+    const goToPaymentTest = () => {
+      router.push("/payment-test");
+    };
 
-    return { goToProfile, goToPetList, goToShopping, goToSitterList, goToSitterProfile };
+    return { goToProfile, goToPetList, goToShopping, goToSitterList, goToSitterProfile , goToPaymentTest};
   },
 };
 </script>
