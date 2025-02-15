@@ -1,348 +1,77 @@
-/* ✅ 전체 레이아웃 스타일 */
+/* Global Styles (style.css) */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: white;
+    color: #333;
+}
+
 .container {
-    max-width: 600px; /* ✅ 기존 400px → 600px으로 넓힘 */
-    max-height: 80vh; /* ✅ 높이 제한 */
-    overflow-y: auto; /* ✅ 세로 스크롤 활성화 */
+    max-width: 400px;
     margin: auto;
-    padding: 30px;
+    padding: 20px;
     background: white;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-/* ✅ 전체 입력 필드 스타일 통일 */
-.input-field,
-.input-group input,
-.input-group select {
-    width: 80%; /* ✅ 모든 입력 필드 동일한 너비 설정 */
-    padding: 10px;
-    margin: 10px auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    display: block;
+h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
 }
 
-/* ✅ 가로 정렬을 위한 input-group 스타일 */
-.input-group {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* ✅ 양쪽 정렬 */
-    gap: 10px;
+.input-field {
     width: 100%;
-    margin: 8px 0;
-}
-
-/* ✅ 라벨과 입력 필드 정렬 */
-.input-group label {
-    width: 120px; /* ✅ 레이블 너비 고정 */
-    text-align: left;
-    font-size: 14px;
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-/* ✅ input-group 내부 입력 필드 스타일 */
-.input-group input,
-.input-group select {
-    flex: 1; /* ✅ 남은 공간 차지 */
-    min-width: 200px; /* ✅ 최소 너비 설정 */
-}
-
-/* ✅ 버튼 크기도 입력 필드와 동일하게 설정 */
-.btn {
-    width: 80%;
     padding: 10px;
-    margin: 10px auto;
-    border: none;
-    cursor: pointer;
+    margin: 10px 0;
+    border: 2px solid #F6EAC2; /* 연노랑 */
     border-radius: 5px;
-    box-sizing: border-box;
-    font-size: 14px;
+    background-color: white;
+    font-size: 16px;
 }
-/* ✅ 민트색 버튼 (회원 관련 기능) */
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+}
+
 .btn-mint {
-    background-color: #40e0d0;
-    color: black;
+    background-color: #C6DBDA; /* 민트 */
+    color: white;
 }
 
 .btn-mint:hover {
-    background-color: #008b8b;
+    background-color: #A5C6C3;
+}
+
+.btn-secondary {
+    background-color: #FED7C3; /* 살구 */
     color: white;
 }
 
-/* ✅ 핑크색 버튼 (펫 관련 기능) */
-.btn-pink {
-    background-color: #FACCD9 !important; /* ✅ 기본 연한 핑크 */
-    color: black;
-
+.btn-secondary:hover {
+    background-color: #E5C0A9;
 }
 
-.btn-pink:hover {
-    background-color: #FE80A2 !important; /* ✅ 호버 시 진한 핑크 */
-    color: white;
-}
-
-/* ✅ 오렌지 버튼 (쇼핑몰) */
-.btn-orange {
-    color: black;
-    background-color: #FFC58C;
-}
-
-.btn-orange:hover {
-    background-color: #E18A5C;
-    color: white;
-}
-
-/* ✅ 기본 버튼*/
-.btn-gray {
-    color: black;
-    background-color: #d4e2e2 !important; /* ✅ 기본 연한 핑크 */
-}
-
-.btn-gray:hover {
-    background-color: #838787 !important; /* ✅ 호버 시 진한 핑크 */
-    color: white;
-}
-
-/* ✅ 파란 버튼 (펫시터 관리) */
-.btn-blue {
-    color: black;
-    background-color: #8DA9FF !important;
-}
-
-.btn-blue:hover {
-    background-color: #2b355a !important;
-    color: white;
-}
-
-.back-button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    margin-bottom: 30px;
-  }
-  
-  .back-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background-color: #007AFF;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .back-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .back-button i {
-    font-size: 14px;
-  }
-  
-
-
-
-/* ✅ 모달 스타일 */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    width: 300px;
-}
-
-/* ✅ 통일된 입력 필드 스타일 */
-/* ✅ 모달 스타일 */
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    width: 320px; /* ✅ 모달 크기 일정하게 조정 */
-    box-sizing: border-box;
-}
-
-/* ✅ 입력 필드 및 셀렉트 박스 스타일 */
-.input-field {
-    width: 80%; /* ✅ 모든 필드 동일한 너비 설정 */
-    padding: 10px;
-    margin: 13px auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    display: block;
-}
-
-/* ✅ 모달 내부 input 필드 스타일 통일 */
-.modal-content input {
-    width: 90%; /* ✅ 다른 입력 필드와 동일한 너비 */
-    padding: 10px;
-    margin: 8px auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    text-align: center;
-}
-
-/* ✅ 버튼 스타일 */
-.modal-content button {
-    width: 90%; /* ✅ 입력 필드와 동일한 너비 */
-    padding: 12px;
-    margin: 8px auto;
-    font-size: 16px;
-    text-align: center;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-/* ✅ 입력 그룹 스타일 */
-.input-group {
-    display: flex;
-    align-items: center; /* ✅ 입력 필드와 레이블을 같은 높이로 정렬 */
-    gap: 8px; /* ✅ 간격 최소화 */
-    margin-bottom: 12px; /* ✅ 요소 간 여백 조정 */
-}
-
-/* ✅ 레이블 스타일 */
-.input-group label {
-    width: 80px; /* ✅ 레이블 너비 고정 */
-    text-align: left;
-    font-size: 14px;
+/* 회원가입/로그인 링크 */
+.auth-link {
+    color: #40E0D0;
     font-weight: bold;
-    margin-right: 5px; /* ✅ 레이블과 입력 필드 간격 */
-    white-space: nowrap; /* ✅ 줄 바꿈 방지 */
+    text-decoration: none;
 }
 
-/* ✅ 입력 필드 및 셀렉트 박스 스타일 */
-.input-group input,
-.input-group select {
-    flex: 1; /* ✅ 남은 공간을 채움 */
-    min-width: 200px; /* ✅ 최소 너비 설정 */
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-
-/* ✅ 카드 컨테이너 (2열 배치) */
-.pet-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* ✅ 2열 */
-    gap: 15px; /* ✅ 카드 간격 */
-    padding: 10px;
-}
-
-
-/* ✅ 카드 스타일 */
-.pet-card {
-    display: flex;
-    align-items: center;
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: left;
-    gap: 20px;
-    justify-content: flex-end; /* ✅ 내용 가운데 정렬 */
-}
-
-
-/* ✅ 왼쪽: 정사각형 이미지 */
-.pet-image img {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-}
-
-/* ✅ 카드 내 텍스트 */
-.pet-info {
-    flex: 1;
-    font-size: 14px;
-    text-align: left;
-}
-
-/* ✅ 뒤로 가기 버튼 컨테이너 */
-.header {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    position: relative;
-}
-
-/* ✅ 뒤로 가기 아이콘 (←) */
-.back-button {
-    font-size: 24px;
-    cursor: pointer;
-    color: #333;
-    transition: color 0.2s ease-in-out;
-    margin-left: 20px; /* 좌측 여백 조정 */
-}
-
-.back-button:hover {
-    color: #008b8b;
-}
-
-/* ✅ 프로필 박스 (너비 조정 & 중앙 정렬) */
-.profile-box {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 350px;
-    margin: auto;
-    text-align: left;
-}
-
-/* ✅ 프로필 정보 행 */
-.profile-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    font-size: 16px;
-}
-
-/* ✅ 라벨 스타일 */
-.label {
-    font-weight: bold;
-    color: #333;
-}
-
-/* ✅ 값 스타일 */
-.value {
-    color: #000;
-    text-align: right;
-    flex: 1;
-}
-
-/* ✅ 버튼 그룹 */
-.button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-    margin-top: 20px;
+.auth-link:hover {
+    text-decoration: underline;
 }
