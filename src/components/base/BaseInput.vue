@@ -37,7 +37,6 @@ defineEmits(["update:modelValue"]);
 .input-label {
   font-size: 14px;
   font-weight: bold;
-  margin-bottom: 5px;
   display: block;
   color: #492815;
 }
@@ -49,7 +48,7 @@ defineEmits(["update:modelValue"]);
   border-radius: 5px;
   border: 2px solid #F6EAC2; /* 연노랑 */
   background-color: white;
-  font-size: 16px;
+  font-size: 14px;
   color: #333;
   outline: none;
   transition: border 0.3s, box-shadow 0.3s;
