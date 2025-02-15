@@ -17,7 +17,7 @@
     <BaseCheckbox v-model="selectedCheckboxes" label="체크박스 선택 중" :options="checkboxOptions" />
     <p>선택된 체크박스 값: {{ selectedCheckboxes }}</p>
 
-    <BaseRadio v-model="selectedRadio" :options="radioOptions" />
+    <BaseRadio v-model="selectedRadio" label="라디오 선택 중"  :options="radioOptions" />
     <p>선택된 값: {{ selectedRadio }}</p>
 
     <BaseChip text="테스트 칩~~~~~~~~~~~~~~" />

@@ -1,20 +1,24 @@
 <template>
   <div class="radio-container">
-    <label v-for="option in options" :key="option.value" class="radio-label">
-      <input
-          type="radio"
-          :value="option.value"
-          :checked="modelValue === option.value"
-          @change="$emit('update:modelValue', option.value)"
-          class="radio-input"
-      />
-      {{ option.label }}
-    </label>
+    <label v-if="label" class="radio-group-label">{{ label }}</label>
+    <div class="radio-group">
+      <label v-for="option in options" :key="option.value" class="radio-label">
+        <input
+            type="radio"
+            :value="option.value"
+            :checked="modelValue === option.value"
+            @change="$emit('update:modelValue', option.value)"
+            class="radio-input"
+        />
+        {{ option.label }}
+      </label>
+    </div>
   </div>
 </template>
 
 <script setup>
 defineProps({
+  label: String,
   options: Array,
   modelValue: String,
 });
@@ -24,18 +28,31 @@ defineEmits(["update:modelValue"]);
 
 <style scoped>
 .radio-container {
+  width: 100%;
+  text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 5px;
   padding: 10px;
+}
+
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.radio-group-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #492815; /* 공통 라벨 색상 */
+  margin-bottom: 10px;
 }
 
 .radio-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   font-size: 14px;
-  font-weight: bold;
   color: #492815; /* 공통 라벨 색상 */
 }
 
