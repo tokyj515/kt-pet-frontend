@@ -26,11 +26,13 @@ defineProps({
   width: 100%;
   padding: 12px;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
   border: none;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .btn-yellow {
