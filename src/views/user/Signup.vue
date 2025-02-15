@@ -1,11 +1,11 @@
 <template>
-  <div class="auth-container">
+  <div class="container">
     <h2>회원가입</h2>
     <form @submit.prevent="signup">
-      <BaseInput v-model="username" label="아이디" placeholder="아이디를 입력하세요" required />
-      <BaseInput v-model="password" label="비밀번호" type="password" placeholder="비밀번호를 입력하세요" required />
-      <BaseInput v-model="name" label="이름" placeholder="이름을 입력하세요" required />
-      <BaseInput v-model="email" label="이메일" placeholder="이메일을 입력하세요" required />
+      <BaseInput v-model="username" label="아이디" placeholder="아이디를 입력하세요" class="base-input" required />
+      <BaseInput v-model="password" label="비밀번호" type="password" placeholder="비밀번호를 입력하세요" class="base-input" required />
+      <BaseInput v-model="name" label="이름" placeholder="이름을 입력하세요" class="base-input" required />
+      <BaseInput v-model="email" label="이메일" placeholder="이메일을 입력하세요" class="base-input" required />
       <BaseButton type="submit" class="mt-4">가입하기</BaseButton>
     </form>
     <p>이미 계정이 있나요? <router-link to="/login" class="router-link">로그인</router-link></p>
@@ -42,19 +42,12 @@ const signup = async () => {
 </script>
 
 <style scoped>
-.auth-container {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
+.base-input {
+  position: relative;
+  z-index: 100;
+  pointer-events: auto; /* 클릭 가능하도록 설정 */
 }
 
-p {
-  margin-top: 10px;
-}
 
 
 </style>
