@@ -42,6 +42,7 @@ const toggleCheckbox = (value) => {
   display: flex;
   flex-direction: column;
   padding: 10px;
+  margin-bottom: 10px;
 }
 
 .checkbox-group {

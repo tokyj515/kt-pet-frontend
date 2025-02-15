@@ -11,16 +11,15 @@
     <BaseSelect v-model="selectedOption" label="옵션 선택" :options="selectOptions" />
     <p>선택된 값: {{ selectedOption }}</p>
 
-<!--    <BaseCheckbox v-model="checkedValue" label="약관 동의" />-->
-<!--    <p>체크 상태: {{ checkedValue }}</p>-->
-
     <BaseCheckbox v-model="selectedCheckboxes" label="체크박스 선택 중" :options="checkboxOptions" />
     <p>선택된 체크박스 값: {{ selectedCheckboxes }}</p>
 
     <BaseRadio v-model="selectedRadio" label="라디오 선택 중"  :options="radioOptions" />
     <p>선택된 값: {{ selectedRadio }}</p>
 
-    <BaseChip text="테스트 칩~~~~~~~~~~~~~~" />
+    <BaseChip :chips="chipList" label="선택된 칩" @remove-chip="removeChip" />
+    <p>선택된 칩: {{ chipList }}</p>
+
 
     <BaseButton class="mt-4">기본 버튼</BaseButton>
     <BaseButton :primary="false" class="mt-2">보조 버튼</BaseButton>
@@ -42,6 +41,7 @@ const checkedValue = ref(false);
 const selectedRadio = ref("");
 const selectedOption = ref("");
 const selectedCheckboxes = ref([]);
+const chipList = ref(["칩 1", "칩 2", "칩 3"]);
 
 const selectOptions = [
   { label: "옵션 1", value: "1" },
@@ -58,6 +58,10 @@ const checkboxOptions = [
   { label: "체크박스 2", value: "2" },
   { label: "체크박스 3", value: "3" },
 ];
+
+const removeChip = (chip) => {
+  chipList.value = chipList.value.filter(c => c !== chip);
+};
 </script>
 
 <style scoped>

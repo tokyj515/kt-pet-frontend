@@ -33,6 +33,7 @@ defineEmits(["update:modelValue"]);
   display: flex;
   flex-direction: column;
   padding: 10px;
+  margin-bottom: 10px;
 }
 
 .radio-group {
