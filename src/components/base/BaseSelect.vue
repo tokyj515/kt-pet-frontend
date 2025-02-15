@@ -27,12 +27,13 @@ defineEmits(["update:modelValue"]);
 .select-container {
   width: 100%;
   padding: 10px;
+  text-align: left;
+  background-color: white;
 }
 
 .select-label {
   font-size: 14px;
   font-weight: bold;
-  margin-bottom: 5px;
   display: block;
   color: #492815; /* 변경된 입력 필드 라벨 색상 */
 }
@@ -40,10 +41,11 @@ defineEmits(["update:modelValue"]);
 .select-field {
   width: 100%;
   padding: 10px;
+  margin: 10px 0;
   border-radius: 5px;
   border: 2px solid #F6EAC2; /* 연노랑 */
   background-color: white;
-  font-size: 16px;
+  font-size: 14px;
   color: #333;
   outline: none;
   transition: border 0.3s, box-shadow 0.3s;
