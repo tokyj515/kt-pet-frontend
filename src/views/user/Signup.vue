@@ -42,12 +42,19 @@ const signup = async () => {
 </script>
 
 <style scoped>
-.base-input {
-  position: relative;
-  z-index: 100;
-  pointer-events: auto; /* 클릭 가능하도록 설정 */
+.auth-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
+p {
+  margin-top: 10px;
+}
 
 
 </style>
