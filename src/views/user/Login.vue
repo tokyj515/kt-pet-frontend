@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-container">
+  <div class="container">
     <h2>로그인</h2>
     <form @submit.prevent="login">
       <BaseInput v-model="username" label="아이디" placeholder="아이디를 입력하세요" required />
@@ -51,15 +51,7 @@ const login = async () => {
 </script>
 
 <style scoped>
-.auth-container {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
+
 
 p {
   margin-top: 10px;
