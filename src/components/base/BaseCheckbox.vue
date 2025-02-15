@@ -1,30 +1,68 @@
 <template>
   <div class="checkbox-container">
-    <input
-        type="checkbox"
-        :checked="modelValue"
-        @change="$emit('update:modelValue', $event.target.checked)"
-        class="checkbox"
-    />
-    <label class="checkbox-label">{{ label }}</label>
+    <label v-if="label" class="checkbox-group-label">{{ label }}</label>
+    <div class="checkbox-group">
+      <label v-for="option in options" :key="option.value" class="checkbox-label">
+        <input
+            type="checkbox"
+            :value="option.value"
+            :checked="modelValue.includes(option.value)"
+            @change="toggleCheckbox(option.value)"
+            class="checkbox"
+        />
+        {{ option.label }}
+      </label>
+    </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { defineProps, defineEmits } from "vue";
+
+const props = defineProps({
   label: String,
-  modelValue: Boolean, // 부모에서 전달받는 값
+  options: Array,
+  modelValue: Array, // 체크박스 선택 값을 배열로 받음
 });
 
-defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
+
+const toggleCheckbox = (value) => {
+  const newValue = props.modelValue.includes(value)
+      ? props.modelValue.filter((v) => v !== value)
+      : [...props.modelValue, value];
+  emit("update:modelValue", newValue);
+};
 </script>
 
 <style scoped>
 .checkbox-container {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.checkbox-group-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #492815; /* 공통 라벨 색상 */
+  margin-bottom: 10px;
+}
+
+.checkbox-label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px;
+  gap: 5px;
+  font-size: 14px;
+  color: #492815; /* 공통 라벨 색상 */
 }
 
 .checkbox {
@@ -44,11 +82,5 @@ defineEmits(["update:modelValue"]);
 .checkbox:checked {
   background-color: #C6DBDA; /* 민트 */
   border-color: #C6DBDA;
-}
-
-.checkbox-label {
-  font-size: 14px;
-  font-weight: bold;
-  color: #492815; /* 공통 라벨 색상 */
 }
 </style>

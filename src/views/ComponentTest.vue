@@ -11,8 +11,11 @@
     <BaseSelect v-model="selectedOption" label="옵션 선택" :options="selectOptions" />
     <p>선택된 값: {{ selectedOption }}</p>
 
-    <BaseCheckbox v-model="checkedValue" label="약관 동의" />
-    <p>체크 상태: {{ checkedValue }}</p>
+<!--    <BaseCheckbox v-model="checkedValue" label="약관 동의" />-->
+<!--    <p>체크 상태: {{ checkedValue }}</p>-->
+
+    <BaseCheckbox v-model="selectedCheckboxes" label="체크박스 선택 중" :options="checkboxOptions" />
+    <p>선택된 체크박스 값: {{ selectedCheckboxes }}</p>
 
     <BaseRadio v-model="selectedRadio" :options="radioOptions" />
     <p>선택된 값: {{ selectedRadio }}</p>
@@ -38,6 +41,7 @@ const email = ref("");
 const checkedValue = ref(false);
 const selectedRadio = ref("");
 const selectedOption = ref("");
+const selectedCheckboxes = ref([]);
 
 const selectOptions = [
   { label: "옵션 1", value: "1" },
@@ -47,6 +51,12 @@ const selectOptions = [
 const radioOptions = [
   { label: "라디오 1", value: "1" },
   { label: "라디오 2", value: "2" },
+];
+
+const checkboxOptions = [
+  { label: "체크박스 1", value: "1" },
+  { label: "체크박스 2", value: "2" },
+  { label: "체크박스 3", value: "3" },
 ];
 </script>
 
