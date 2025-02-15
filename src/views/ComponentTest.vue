@@ -66,14 +66,6 @@ const removeChip = (chip) => {
 
 <style scoped>
 
-h2 {
-  font-size: 24px;
-  margin-bottom: 15px;
-}
 
-p {
-  font-size: 14px;
-  margin-top: 5px;
-  color: #555;
-}
+
 </style>
