@@ -12,7 +12,7 @@ body {
 }
 
 .container {
-    max-width: 400px;
+    max-width: 600px;
     margin: auto;
     padding: 20px;
     background: white;
@@ -26,52 +26,7 @@ h2 {
     margin-bottom: 15px;
 }
 
-.input-field {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 2px solid #F6EAC2; /* 연노랑 */
-    border-radius: 5px;
-    background-color: white;
-    font-size: 16px;
-}
 
-.btn {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-    border: none;
-}
 
-.btn-mint {
-    background-color: #C6DBDA; /* 민트 */
-    color: white;
-}
 
-.btn-mint:hover {
-    background-color: #A5C6C3;
-}
 
-.btn-secondary {
-    background-color: #FED7C3; /* 살구 */
-    color: white;
-}
-
-.btn-secondary:hover {
-    background-color: #E5C0A9;
-}
-
-/* 회원가입/로그인 링크 */
-.auth-link {
-    color: #40E0D0;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.auth-link:hover {
-    text-decoration: underline;
-}
