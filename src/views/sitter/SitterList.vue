@@ -9,10 +9,15 @@
 
     <!-- ✅ 펫시터 목록 -->
     <div v-else class="sitter-list">
-      <BaseCard v-for="sitter in sitters" :key="sitter.sitterId">
+      <BaseCard
+          v-for="sitter in sitters"
+          :key="sitter.sitterId"
+          class="clickable-card"
+          @click="viewDetail(sitter.sitterId)"
+      >
         <template #header>
           <div class="card-header">
-            <h3>{{ sitter.name }}</h3>
+            <h3 class="sitter-name">{{ sitter.name }}</h3>
             <span class="location">{{ sitter.location || "위치 정보 없음" }}</span>
           </div>
         </template>
@@ -35,10 +40,6 @@
             <span class="label">시간당 요금</span>
             <span class="value">{{ sitter.charge ? `${sitter.charge}원` : "미등록" }}</span>
           </div>
-        </template>
-
-        <template #footer>
-          <BaseButton @click="viewDetail(sitter.sitterId)" :primary="2">상세 보기</BaseButton>
         </template>
       </BaseCard>
     </div>
@@ -107,6 +108,16 @@ onMounted(fetchSitters);
   gap: 20px;
 }
 
+/* ✅ 카드 전체 클릭 가능 */
+.clickable-card {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.clickable-card:hover {
+  transform: translateY(-3px);
+}
+
 /* ✅ 카드 헤더 스타일 */
 .card-header {
   display: flex;
@@ -115,17 +126,22 @@ onMounted(fetchSitters);
   margin-bottom: 5px;
 }
 
-.card-header h3 {
+/* ✅ 시터 이름 (왼쪽 정렬 유지) */
+.sitter-name {
+  flex-grow: 1;  /* 왼쪽에 고정되도록 설정 */
   margin: 0;
+  font-size: 1.2rem;
   color: #492815; /* 딥 브라운 */
 }
 
+/* ✅ 위치 정보 (오른쪽 끝으로 이동) */
 .location {
   background-color: #FED7C3; /* 연한 피치 */
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 0.9rem;
   color: #492815;
+  white-space: nowrap;  /* 줄 바꿈 방지 */
 }
 
 /* ✅ 요금 정보 (서비스 컬러 적용) */
@@ -136,7 +152,6 @@ onMounted(fetchSitters);
   padding: 12px 15px;
   border-radius: 8px;
   border: 1px solid #FED7C3;
-  margin-bottom: 15px;
 }
 
 /* ✅ 요금 라벨 */
@@ -157,15 +172,6 @@ onMounted(fetchSitters);
   color: #666;
 }
 
-@media (max-width: 480px) {
-  .container {
-    padding: 15px;
-  }
 
-  .charge {
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-  }
-}
 </style>
+
