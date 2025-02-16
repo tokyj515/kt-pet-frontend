@@ -44,7 +44,7 @@
 }
 
 .card-body {
-
+  margin-bottom: 15px;
 }
 
 .card-footer {

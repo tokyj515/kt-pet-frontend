@@ -134,9 +134,9 @@ onMounted(fetchSitters);
   justify-content: space-between;
   align-items: center;
   padding: 12px 15px;
-  //background: #FFF2EB;  /* 부드러운 피치톤 */
   border-radius: 8px;
   border: 1px solid #FED7C3;
+  margin-bottom: 15px;
 }
 
 /* ✅ 요금 라벨 */
