@@ -23,7 +23,7 @@ const routes = [
     { path: "/shopping", component: Shopping },
     { path: "/pet/:petId", component: PetInfo }, // ✅ 동적 라우트 추가
     { path: "/sitter-register", component: SitterRegister }, // ✅ 동적 라우트 추가
-    { path: "/sitter-profile", component: SitterProfile },
+    { path: "/sitter/profile/:sitterId", component: SitterProfile },
     { path: "/sitter-list", component: SitterList },
     { path: "/payment-test", component: PaymentTest },
     { path: "/component-test", component: ComponentTest },
