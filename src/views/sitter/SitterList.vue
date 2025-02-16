@@ -19,32 +19,26 @@
 
         <template #body>
           <!-- 돌봄 가능 동물 -->
-          <div class="care-pets">
-            <h4>돌봄 가능 동물</h4>
-            <BaseChip :chips="filterValidPets(sitter.carePetList).map(pet => pet.petType)" />
-          </div>
-
+          <BaseChip
+              :chips="filterValidPets(sitter.carePetList).map(pet => pet.petType)"
+              label="돌봄 가능 동물"
+          />
 
           <!-- 돌봄 가능 시간 -->
-          <div class="care-times">
-            <h4>돌봄 가능 시간</h4>
-            <div class="time-list">
-              <div v-for="(time, index) in filterValidTimes(sitter.careTimeList)" :key="index" class="time-item">
-                <span class="day">{{ time.day }}</span>
-                <span>{{ time.startTime }} - {{ time.endTime }}</span>
-              </div>
-            </div>
-          </div>
+          <BaseChip
+              :chips="filterValidTimes(sitter.careTimeList).map(time => `${time.day}: ${time.startTime} - ${time.endTime}`)"
+              label="돌봄 가능 시간"
+          />
 
-          <!-- 요금 정보 -->
+          <!-- ✅ 요금 정보 (서비스 컬러 적용) -->
           <div class="charge">
-            <span class="label">시간당</span>
+            <span class="label">시간당 요금</span>
             <span class="value">{{ sitter.charge ? `${sitter.charge}원` : "미등록" }}</span>
           </div>
         </template>
 
         <template #footer>
-          <BaseButton @click="viewDetail(sitter.sitterId)" :primary="4">상세 보기</BaseButton>
+          <BaseButton @click="viewDetail(sitter.sitterId)" :primary="2">상세 보기</BaseButton>
         </template>
       </BaseCard>
     </div>
@@ -55,6 +49,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from "vue";
@@ -105,8 +100,6 @@ onMounted(fetchSitters);
 </script>
 
 <style scoped>
-
-
 /* ✅ 시터 리스트 스타일 */
 .sitter-list {
   display: flex;
@@ -119,64 +112,42 @@ onMounted(fetchSitters);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 .card-header h3 {
   margin: 0;
-  font-size: 1.2rem;
-  color: #2c3e50;
+  color: #492815; /* 딥 브라운 */
 }
 
 .location {
-  background-color: #f0f0f0;
+  background-color: #FED7C3; /* 연한 피치 */
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 0.9rem;
-  color: #666;
+  color: #492815;
 }
 
-/* ✅ 돌봄 가능 시간 */
-.time-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.time-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 15px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  font-size: 0.9rem;
-}
-
-.day {
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-/* ✅ 요금 정보 */
+/* ✅ 요금 정보 (서비스 컬러 적용) */
 .charge {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 15px 0;
   padding: 12px 15px;
-  background: #f8f9fa;
+  //background: #FFF2EB;  /* 부드러운 피치톤 */
   border-radius: 8px;
+  border: 1px solid #FED7C3;
 }
 
+/* ✅ 요금 라벨 */
 .charge .label {
-  color: #666;
-  font-size: 0.95rem;
+  color: #492815;  /* 딥 브라운 */
 }
 
+/* ✅ 요금 값 */
 .charge .value {
-  font-weight: 600;
-  color: #007AFF;
-  font-size: 1.1rem;
+  font-weight: bold;
+  color: #492815;  /* 포인트 컬러 */
 }
 
 /* ✅ 데이터 없음 */
@@ -189,11 +160,6 @@ onMounted(fetchSitters);
 @media (max-width: 480px) {
   .container {
     padding: 15px;
-  }
-
-  .time-item {
-    flex-direction: column;
-    gap: 4px;
   }
 
   .charge {
