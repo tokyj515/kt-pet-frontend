@@ -3,13 +3,13 @@
     <h2>펫시터 등록</h2>
 
     <!-- ✅ 위치 선택 -->
-    <BaseSelect v-model="sitterData.location" label="위치" :options="locations" />
+    <BaseSelect v-model="sitterData.location" label="위치" :options="locationOptions" />
 
     <!-- ✅ 요금 입력 -->
     <BaseInput v-model="sitterData.charge" label="요금" type="number" placeholder="요금을 입력하세요" min="0" />
 
     <!-- ✅ 돌봄 가능 동물 선택 (체크박스 형태) -->
-    <BaseCheckbox v-model="sitterData.carePetList" label="돌봄 가능 동물" :options="petTypes" />
+    <BaseCheckbox v-model="sitterData.carePetList" label="돌봄 가능 동물" :options="petTypeOptions" />
 
     <!-- ✅ 돌봄 가능 시간 설정 (BaseDayTime 사용) -->
     <BaseDayTime v-model="sitterData.careTimeList" label="돌봄 가능 시간" />
@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "@/api/axios.js";
 import BaseSelect from "@/components/base/BaseSelect.vue";
@@ -33,11 +33,26 @@ import BaseButton from "@/components/base/BaseButton.vue";
 
 const router = useRouter();
 
-// ✅ 위치 옵션 (BaseSelect에 전달)
-const locations = ["서울", "경기", "부산", "대구", "광주", "대전", "울산", "제주"];
+// ✅ BaseSelect에 맞게 locationOptions을 수정
+const locationOptions = [
+  { label: "서울", value: "서울" },
+  { label: "경기", value: "경기" },
+  { label: "부산", value: "부산" },
+  { label: "대구", value: "대구" },
+  { label: "광주", value: "광주" },
+  { label: "대전", value: "대전" },
+  { label: "울산", value: "울산" },
+  { label: "제주", value: "제주" }
+];
 
-// ✅ 돌봄 가능 동물 옵션 (BaseCheckbox에 전달)
-const petTypes = ["강아지", "고양이", "토끼", "새", "기타"];
+// ✅ BaseCheckbox에 맞게 petTypeOptions을 수정
+const petTypeOptions = [
+  { label: "강아지", value: "강아지" },
+  { label: "고양이", value: "고양이" },
+  { label: "토끼", value: "토끼" },
+  { label: "새", value: "새" },
+  { label: "기타", value: "기타" }
+];
 
 const sitterData = ref({
   location: "",
