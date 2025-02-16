@@ -33,7 +33,10 @@ import BaseButton from "@/components/base/BaseButton.vue";
 
 const router = useRouter();
 
+// ✅ 위치 옵션 (BaseSelect에 전달)
 const locations = ["서울", "경기", "부산", "대구", "광주", "대전", "울산", "제주"];
+
+// ✅ 돌봄 가능 동물 옵션 (BaseCheckbox에 전달)
 const petTypes = ["강아지", "고양이", "토끼", "새", "기타"];
 
 const sitterData = ref({
@@ -46,11 +49,6 @@ const sitterData = ref({
     endTime: "",
   })),
 });
-
-// ✅ 변경된 돌봄 가능 시간을 감지하는 디버깅용 watch
-watch(() => sitterData.value.careTimeList, (newVal) => {
-  console.log("👀 sitterData.careTimeList 변경됨:", newVal);
-}, { deep: true });
 
 // ✅ 시터 등록 요청
 const registerSitter = async () => {

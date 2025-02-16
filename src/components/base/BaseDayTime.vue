@@ -50,11 +50,11 @@ const isModalOpen = ref(false);
 const modalData = ref({ day: "", startTime: "", endTime: "" });
 const modalIndex = ref(null);
 
-const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+// ✅ 24시간 선택 가능하도록 변경
+const hours = Array.from({ length: 24 }, (_, i) => ({ label: `${i}:00`, value: `${i}:00` }));
 
 // ✅ 모달 열기 (요일 클릭 시)
 const openModal = (index) => {
-  console.log("🟢 모달 열기 실행됨:", index, props.modelValue[index]); // 디버깅용 로그
   if (props.modelValue[index]) {
     modalData.value = { ...props.modelValue[index] };
     modalIndex.value = index;
@@ -91,8 +91,10 @@ watch(() => props.modelValue, (newVal) => {
 <style scoped>
 .day-time-container {
   width: 100%;
+  text-align: left;
   padding: 10px;
   border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 .day-time-label {
