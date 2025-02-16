@@ -7,9 +7,14 @@
 <script setup>
 import { computed } from "vue";
 
+// ✅ Props 선언
 const props = defineProps({
   primary: Number, // primary 값 (1, 2, 3, 4)
 });
+
+// ✅ emit 선언 (이벤트 정의)
+const emit = defineEmits(["click"]);
+
 
 const buttonClass = computed(() => {
   switch (props.primary) {  // ✅ props.primary로 접근
@@ -26,11 +31,12 @@ const buttonClass = computed(() => {
   }
 });
 
-defineEmits(["click"]);
 
+// ✅ 버튼 클릭 핸들러
 const onClick = () => {
   emit("click");
 };
+
 </script>
 
 <style scoped>

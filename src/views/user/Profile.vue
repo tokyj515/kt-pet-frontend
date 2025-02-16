@@ -41,7 +41,7 @@
         <BaseButton @click="closeModifyModal" class="w-full">닫기</BaseButton>
       </div>
     </div>
-ㄴ
+
     <!-- ✅ 비밀번호 변경 모달 -->
     <div v-if="isPasswordModalOpen" class="modal">
       <div class="modal-content">
