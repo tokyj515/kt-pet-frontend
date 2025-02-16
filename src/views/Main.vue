@@ -51,7 +51,7 @@ const router = useRouter();
 const goToProfile = () => router.push("/profile");
 const goToPetList = () => router.push("/pet-list");
 const goToShopping = () => router.push("/shopping");
-const goToSitterProfile = () => router.push("/sitter-profile");
+const goToSitterProfile = () => router.push("/sitter/profile/me");
 const goToSitterList = () => router.push("/sitter-list");
 const goToPaymentTest = () => router.push("/payment-test");
 </script>
