@@ -1,23 +1,36 @@
 <template>
-  <button
-      :class="[
-      'btn',
-      primary ? 'btn-yellow' : 'btn-secondary',
-    ]"
-      @click="onClick"
-  >
+  <button :class="['btn', buttonClass, 'w-full']" @click="onClick">
     <slot />
   </button>
 </template>
 
 <script setup>
-defineProps({
-  primary: {
-    type: Boolean,
-    default: true,
-  },
-  onClick: Function,
+import { computed } from "vue";
+
+const props = defineProps({
+  primary: Number, // primary 값 (1, 2, 3, 4)
 });
+
+const buttonClass = computed(() => {
+  switch (props.primary) {  // ✅ props.primary로 접근
+    case 1:
+      return "btn-yellow";
+    case 2:
+      return "btn-peach";
+    case 3:
+      return "btn-blue";
+    case 4:
+      return "btn-mint";
+    default:
+      return "btn-gray";
+  }
+});
+
+defineEmits(["click"]);
+
+const onClick = () => {
+  emit("click");
+};
 </script>
 
 <style scoped>
@@ -35,21 +48,45 @@ defineProps({
   margin-bottom: 5px;
 }
 
+
+
+/* 🟡 연노랑 버튼 */
 .btn-yellow {
-  background-color: #F6EAC2; /* 연노랑 */
-  color: #492815; /* 공통 라벨 색상 */
+  background-color: #F6EAC2;
+  color: #492815;
 }
 
 .btn-yellow:hover {
-  background-color: #E5D4A1; /* 약간 어두운 연노랑 */
+  background-color: #E5D4A1;
 }
 
-.btn-secondary {
-  background-color: #B0B0B0; /* 회색 */
+/* 🩶 회색 버튼 */
+.btn-gray {
+  background-color: #B0B0B0;
   color: #FFFFFF;
 }
 
-.btn-secondary:hover {
-  background-color: #909090; /* 어두운 회색 */
+.btn-gray:hover {
+  background-color: #909090;
+}
+
+/* 🍑 살구색 버튼 */
+.btn-peach {
+  background-color: #FED7C3;
+  color: #492815;
+}
+
+.btn-peach:hover {
+  background-color: #F5B89E;
+}
+
+/* 🌿 연한 민트색 버튼 */
+.btn-mint {
+  background-color: #C6DBDA;
+  color: #492815;
+}
+
+.btn-mint:hover {
+  background-color: #A5C5C4;
 }
 </style>

@@ -21,8 +21,12 @@
     <p>선택된 칩: {{ chipList }}</p>
 
 
-    <BaseButton class="mt-4">기본 버튼</BaseButton>
-    <BaseButton :primary="false" class="mt-2">보조 버튼</BaseButton>
+    <BaseButton :primary="1">노란 버튼</BaseButton>
+    <BaseButton :primary="2">피치 버튼</BaseButton>
+    <BaseButton :primary="3">연회색 버튼</BaseButton>
+    <BaseButton :primary="4">민트색 버튼</BaseButton>
+    <BaseButton>찐회색 버튼</BaseButton>
+
   </div>
 </template>
 

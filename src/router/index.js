@@ -10,7 +10,7 @@ import PetInfo from "@/views/pet/PetInfo.vue";
 import SitterRegister from "@/views/sitter/SitterRegister.vue";
 import SitterProfile from "@/views/sitter/SitterProfile.vue"; // ✅ 펫 상세정보 페이지 추가
 import SitterList from "@/views/sitter/SitterList.vue";
-import PaymentTest from "@/views/PaymentTest.vue";
+import PaymentTest from "@/views/payment/PaymentTest.vue";
 import ComponentTest from "@/views/ComponentTest.vue";  // 추가
 
 const routes = [
