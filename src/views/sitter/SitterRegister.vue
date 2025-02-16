@@ -127,15 +127,22 @@ const registerSitter = async () => {
       },
     });
 
-    if (response.data.success) {
+    console.log("📌 서버 응답:", response.data);
+
+    // ✅ 서버 응답에서 code가 200인지 확인
+    if (response.data.code === 200) {
       alert("시터 등록이 완료되었습니다.");
-      router.push("/");
+      router.push("/"); // 정상적으로 메인 페이지로 이동
+    } else {
+      console.warn("❌ 서버 응답에서 code가 200이 아님:", response.data);
+      alert(response.data.message || "시터 등록이 실패했습니다.");
     }
   } catch (error) {
     console.error("🚨 시터 등록 실패:", error);
     alert(error.response?.data?.message || "시터 등록에 실패했습니다.");
   }
 };
+
 </script>
 
 <style scoped>
