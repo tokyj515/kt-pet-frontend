@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import axios from "@/api/axios.js";
 import BaseSelect from "@/components/base/BaseSelect.vue";
@@ -46,6 +46,11 @@ const sitterData = ref({
     endTime: "",
   })),
 });
+
+// ✅ 변경된 돌봄 가능 시간을 감지하는 디버깅용 watch
+watch(() => sitterData.value.careTimeList, (newVal) => {
+  console.log("👀 sitterData.careTimeList 변경됨:", newVal);
+}, { deep: true });
 
 // ✅ 시터 등록 요청
 const registerSitter = async () => {

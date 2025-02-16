@@ -1,8 +1,8 @@
 <template>
   <div v-if="isOpen" class="modal-overlay" @click.self="close">
     <div class="modal-content">
-      <h3>{{ title }}</h3>
-      <slot />
+      <h3 v-if="title">{{ title }}</h3>
+      <slot v-if="$slots.default" />
       <BaseButton @click="close" class="w-full" :primary="3">닫기</BaseButton>
     </div>
   </div>
@@ -15,7 +15,10 @@ import BaseButton from "@/components/base/BaseButton.vue";
 // ✅ Props 설정
 const props = defineProps({
   isOpen: Boolean,
-  title: String,
+  title: {
+    type: String,
+    default: "모달", // ✅ 기본값 설정
+  },
 });
 
 // ✅ Emit 설정 (닫기 버튼 클릭 시 부모에게 이벤트 전달)
