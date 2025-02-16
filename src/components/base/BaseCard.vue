@@ -37,13 +37,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: 10px;
   margin-bottom: 15px;
   padding-bottom: 12px;
   border-bottom: 1px solid #eee;
 }
 
 .card-body {
-  padding: 10px 0;
+
 }
 
 .card-footer {
