@@ -3,330 +3,116 @@
     <h2>펫시터 등록</h2>
 
     <!-- ✅ 위치 선택 -->
-    <div class="input-group">
-      <label>위치</label>
-      <select v-model="sitterData.location" class="input-field">
-        <option value="" disabled>지역을 선택하세요</option>
-        <option v-for="location in locations" :key="location" :value="location">
-          {{ location }}
-        </option>
-      </select>
-    </div>
+    <BaseSelect v-model="sitterData.location" label="위치" :options="locations" />
 
     <!-- ✅ 요금 입력 -->
-    <div class="input-group">
-      <label>요금</label>
-      <input 
-        v-model="sitterData.charge" 
-        type="number" 
-        placeholder="요금을 입력하세요" 
-        class="input-field"
-        min="0"
-      />
-    </div>
+    <BaseInput v-model="sitterData.charge" label="요금" type="number" placeholder="요금을 입력하세요" min="0" />
 
-    <!-- ✅ 돌봄 가능 동물 선택 -->
-    <div class="input-group">
-      <label>돌봄 가능 동물</label>
-      <div class="pet-selection">
-        <select v-model="selectedPet" class="input-field full-width" @change="addPet">
-          <option value="" disabled>동물을 선택하세요</option>
-          <option v-for="pet in petTypes" :key="pet" :value="pet">{{ pet }}</option>
-        </select>
-        <div class="chip-container">
-          <span v-for="(pet, index) in sitterData.carePetList" :key="index" class="chip">
-            {{ pet }}
-            <i class="fa-solid fa-xmark" @click="removePet(index)"></i>
-          </span>
-        </div>
-      </div>
-    </div>
+    <!-- ✅ 돌봄 가능 동물 선택 (체크박스 형태) -->
+    <BaseCheckbox v-model="sitterData.carePetList" label="돌봄 가능 동물" :options="petTypes" />
 
-    <!-- ✅ 돌봄 가능 시간 설정 -->
-    <div class="input-group">
-      <label>돌봄 가능 시간</label>
-      <div class="care-time-container">
-        <div class="day-buttons">
-          <button v-for="(time, index) in sitterData.careTimeList" :key="index"
-                  :class="['day-btn', time.startTime ? 'active' : '']"
-                  @click="openModal(time, index)">
-            {{ time.day }}
-          </button>
-        </div>
-        <div class="time-chips">
-          <span v-for="(time, index) in sitterData.careTimeList.filter(t => t.startTime && t.endTime)"
-               :key="index" 
-               class="time-chip"
-               @click="openModal(time, index)">
-            {{ time.day }} {{ time.startTime }}~{{ time.endTime }}
-            <i class="fa-solid fa-pen"></i>
-          </span>
-        </div>
-      </div>
-    </div>
+    <!-- ✅ 돌봄 가능 시간 설정 (BaseDayTime 사용) -->
+    <BaseDayTime v-model="sitterData.careTimeList" label="돌봄 가능 시간" />
 
-    <!-- ✅ 모달 시간 선택 -->
-    <div v-if="isModalOpen" class="modal">
-      <div class="modal-content">
-        <h3>{{ modalData.day }} 시간 설정</h3>
-        <div class="time-selectors">
-          <label>시작 시간</label>
-          <select v-model="modalData.startTime" class="input-field">
-            <option v-for="hour in hours" :key="hour" :value="hour">{{ hour }}</option>
-          </select>
-          <label>종료 시간</label>
-          <select v-model="modalData.endTime" class="input-field">
-            <option v-for="hour in hours" :key="hour" :value="hour">{{ hour }}</option>
-          </select>
-        </div>
-        <button class="btn btn-mint" @click="saveTime">저장</button>
-        <button class="btn btn-gray" @click="closeModal">취소</button>
-      </div>
-    </div>
-
-    <!-- ✅ 등록 버튼 -->
+    <!-- ✅ 버튼 그룹 -->
     <div class="button-group">
-      <button @click="registerSitter" class="btn btn-blue">시터 등록하기</button>
+      <BaseButton @click="registerSitter" :primary="4">시터 등록하기</BaseButton>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
-import axios from "@/api/axios.js";
 import { useRouter } from "vue-router";
+import axios from "@/api/axios.js";
+import BaseSelect from "@/components/base/BaseSelect.vue";
+import BaseInput from "@/components/base/BaseInput.vue";
+import BaseCheckbox from "@/components/base/BaseCheckbox.vue";
+import BaseDayTime from "@/components/base/BaseDayTime.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
 
-export default {
-  setup() {
-    const locations = ["서울", "경기", "부산", "대구", "광주", "대전", "울산", "제주"];
-    const petTypes = ["강아지", "고양이", "토끼", "새", "기타"];
-    const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+const router = useRouter();
 
-    const sitterData = ref({
-      location: "",
-      charge: "",
-      carePetList: [],
-      careTimeList: ["월", "화", "수", "목", "금", "토", "일"].map(day => ({
-        day,
-        startTime: "",
-        endTime: ""
-      })),
+const locations = ["서울", "경기", "부산", "대구", "광주", "대전", "울산", "제주"];
+const petTypes = ["강아지", "고양이", "토끼", "새", "기타"];
+
+const sitterData = ref({
+  location: "",
+  charge: "",
+  carePetList: [],
+  careTimeList: ["월", "화", "수", "목", "금", "토", "일"].map(day => ({
+    day,
+    startTime: "",
+    endTime: "",
+  })),
+});
+
+// ✅ 시터 등록 요청
+const registerSitter = async () => {
+  try {
+    if (!sitterData.value.location) {
+      alert("위치를 선택해주세요.");
+      return;
+    }
+    if (!sitterData.value.charge) {
+      alert("요금을 입력해주세요.");
+      return;
+    }
+    if (sitterData.value.carePetList.length === 0) {
+      alert("돌봄 가능한 동물을 선택해주세요.");
+      return;
+    }
+    if (!sitterData.value.careTimeList.some(time => time.startTime && time.endTime)) {
+      alert("돌봄 가능 시간을 최소 1개 이상 선택해주세요.");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    const requestData = {
+      location: sitterData.value.location,
+      charge: Number(sitterData.value.charge),
+      carePetList: sitterData.value.carePetList,
+      careTimeList: sitterData.value.careTimeList
+          .filter(time => time.startTime && time.endTime)
+          .map(time => ({
+            day: time.day,
+            startTime: time.startTime,
+            endTime: time.endTime,
+          })),
+    };
+
+    const response = await axios.post("/sitter/register", requestData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
 
-    const selectedPet = ref("");
-    const isModalOpen = ref(false);
-    const modalData = ref({ day: "", startTime: "", endTime: "" });
-    let modalIndex = ref(null);
-
-    const addPet = () => {
-      if (selectedPet.value && !sitterData.value.carePetList.includes(selectedPet.value)) {
-        sitterData.value.carePetList.push(selectedPet.value);
-      }
-      selectedPet.value = "";
-    };
-
-    const removePet = (index) => {
-      sitterData.value.carePetList.splice(index, 1);
-    };
-
-    const openModal = (time, index) => {
-      modalData.value = { ...time };
-      modalIndex.value = index;
-      isModalOpen.value = true;
-    };
-
-    const saveTime = () => {
-      sitterData.value.careTimeList[modalIndex.value] = { ...modalData.value };
-      isModalOpen.value = false;
-    };
-
-    const closeModal = () => {
-      isModalOpen.value = false;
-    };
-
-    const registerSitter = async () => {
-      try {
-        // 입력값 검증
-        if (!sitterData.value.location) {
-          alert("위치를 선택해주세요.");
-          return;
-        }
-        if (!sitterData.value.charge) {
-          alert("요금을 입력해주세요.");
-          return;
-        }
-        if (sitterData.value.carePetList.length === 0) {
-          alert("돌봄 가능한 동물을 선택해주세요.");
-          return;
-        }
-        if (!sitterData.value.careTimeList.some(time => time.startTime && time.endTime)) {
-          alert("돌봄 가능 시간을 최소 1개 이상 선택해주세요.");
-          return;
-        }
-
-        const token = localStorage.getItem("token");
-
-        const requestData = {
-          location: sitterData.value.location,
-          charge: Number(sitterData.value.charge),
-          carePetList: sitterData.value.carePetList,
-          careTimeList: sitterData.value.careTimeList
-              .filter(time => time.startTime && time.endTime)
-              .map(time => ({
-                day: time.day,
-                startTime: time.startTime,
-                endTime: time.endTime
-              }))
-        };
-
-
-        const response = await axios.post('/sitter/register', requestData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (response.data.success) {
-          alert("시터 등록이 완료되었습니다.");
-          router.push('/sitter-profile');  // 필요한 경우 주석 해제 후 경로 지정
-        }
-      } catch (error) {
-        console.error('시터 등록 실패:', error);
-        alert(error.response?.data?.message || "시터 등록에 실패했습니다.");
-      }
-    };
-
-    return {
-      sitterData,
-      locations,
-      petTypes,
-      selectedPet,
-      addPet,
-      removePet,
-      hours,
-      isModalOpen,
-      modalData,
-      openModal,
-      saveTime,
-      closeModal,
-      registerSitter,
-    };
-  },
+    if (response.data.success) {
+      alert("시터 등록이 완료되었습니다.");
+      router.push("/sitter-profile");
+    }
+  } catch (error) {
+    console.error("🚨 시터 등록 실패:", error);
+    alert(error.response?.data?.message || "시터 등록에 실패했습니다.");
+  }
 };
 </script>
 
 <style scoped>
-.input-group {
+.container {
+  text-align: center;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* ✅ 버튼 그룹 */
+.button-group {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
   gap: 10px;
-}
-
-.day-buttons {
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
-}
-
-.day-btn {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  background: #f0f0f0;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.day-btn.active {
-  background: #8DA9FF;  /* 파란색으로 변경 */
-  border-color: #8DA9FF;
-  color: white;
-}
-
-.selected-times {
-  margin-top: 10px;
-}
-
-.time-display {
-  cursor: pointer;
-  padding: 5px;
-  border: 1px solid #ddd;
-  background: #f9f9f9;
-  border-radius: 5px;
-}
-
-.pet-selection {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-}
-
-.pet-selection select {
-  width: 100%;
-}
-
-.chip-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 0;
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  background-color: #FFB6C1;  /* 연핑크색 */
-  color: white;
-  border-radius: 20px;
-  font-size: 14px;
-  color: #333;
-}
-
-.chip i {
-  margin-left: 6px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.chip i:hover {
-  opacity: 0.7;
-}
-
-.care-time-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-}
-
-.time-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.time-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  background-color: #f5f5f5;
-  border: 1px solid #e0e0e0;
-  border-radius: 20px;
-  font-size: 14px;
-  color: #333;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.time-chip:hover {
-  background-color: #eeeeee;
-}
-
-.time-chip i {
-  margin-left: 6px;
-  font-size: 12px;
-  color: #666;
+  margin-top: 20px;
 }
 </style>
