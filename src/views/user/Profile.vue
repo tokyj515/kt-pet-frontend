@@ -22,35 +22,27 @@
       </div>
     </div>
 
-    <!-- ✅ 버튼 그룹 (BaseButton 적용) -->
+    <!-- ✅ 버튼 그룹 -->
     <div class="button-group">
-      <BaseButton @click="openModifyModal"  :primary="2">정보 수정</BaseButton>
-      <BaseButton @click="openPasswordModal"  :primary="2">비밀번호 변경</BaseButton>
+      <BaseButton @click="isModifyModalOpen = true" :primary="2">정보 수정</BaseButton>
+      <BaseButton @click="isPasswordModalOpen = true" :primary="2">비밀번호 변경</BaseButton>
       <BaseButton @click="withdraw" :primary="3">회원 탈퇴</BaseButton>
-      <BaseButton @click="logout"  :primary="3">로그아웃</BaseButton>
+      <BaseButton @click="logout" :primary="3">로그아웃</BaseButton>
       <BaseButton @click="goToSitterRegister" :primary="4">펫시터 등록</BaseButton>
-      <BaseButton @click="goBack" >뒤로 가기</BaseButton>
+      <BaseButton @click="goBack">뒤로 가기</BaseButton>
     </div>
 
     <!-- ✅ 회원 정보 수정 모달 -->
-    <div v-if="isModifyModalOpen" class="modal">
-      <div class="modal-content">
-        <h3>회원 정보 수정</h3>
-        <input v-model="modifyEmail" type="email" placeholder="새 이메일 입력" class="input-field" />
-        <BaseButton @click="modifyInfo" class="w-full" :primary="4">저장</BaseButton>
-        <BaseButton @click="closeModifyModal" class="w-full">닫기</BaseButton>
-      </div>
-    </div>
+    <BaseModal :isOpen="isModifyModalOpen" title="회원 정보 수정" @close="isModifyModalOpen = false">
+      <BaseInput v-model="modifyEmail" placeholder="새 이메일 입력" />
+      <BaseButton @click="modifyInfo" class="w-full" :primary="4">저장</BaseButton>
+    </BaseModal>
 
     <!-- ✅ 비밀번호 변경 모달 -->
-    <div v-if="isPasswordModalOpen" class="modal">
-      <div class="modal-content">
-        <h3>비밀번호 변경</h3>
-        <input v-model="modifyPassword" type="password" placeholder="새 비밀번호 입력" class="input-field" />
-        <BaseButton @click="modifyPasswordFunc" class="w-full" :primary="4">변경</BaseButton>
-        <BaseButton @click="closePasswordModal" class="w-full">닫기</BaseButton>
-      </div>
-    </div>
+    <BaseModal :isOpen="isPasswordModalOpen" title="비밀번호 변경" @close="isPasswordModalOpen = false">
+      <BaseInput v-model="modifyPassword" type="password" placeholder="새 비밀번호 입력" />
+      <BaseButton @click="modifyPasswordFunc" class="w-full" :primary="4">변경</BaseButton>
+    </BaseModal>
   </div>
 </template>
 
@@ -58,7 +50,9 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import axios from "@/api/axios.js";
-import BaseButton from "@/components/base/BaseButton.vue"; // ✅ BaseButton 추가
+import BaseButton from "@/components/base/BaseButton.vue";
+import BaseInput from "@/components/base/BaseInput.vue";
+import BaseModal from "@/components/base/BaseModal.vue"; // ✅ 추가
 
 const username = ref("");
 const name = ref("");
@@ -73,10 +67,6 @@ const router = useRouter();
 // ✅ 이동 및 기능 정의
 const goToSitterRegister = () => router.push("/sitter-register");
 const goBack = () => router.push("/");
-const openModifyModal = () => (isModifyModalOpen.value = true);
-const closeModifyModal = () => (isModifyModalOpen.value = false);
-const openPasswordModal = () => (isPasswordModalOpen.value = true);
-const closePasswordModal = () => (isPasswordModalOpen.value = false);
 
 const modifyInfo = async () => {
   try {
@@ -86,7 +76,7 @@ const modifyInfo = async () => {
     });
     alert("회원 정보가 수정되었습니다.");
     email.value = modifyEmail.value;
-    closeModifyModal();
+    isModifyModalOpen.value = false;
   } catch (error) {
     alert("회원 정보 수정 실패");
   }
@@ -99,7 +89,7 @@ const modifyPasswordFunc = async () => {
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     });
     alert("비밀번호 변경 완료");
-    closePasswordModal();
+    isPasswordModalOpen.value = false;
   } catch (error) {
     alert("비밀번호 변경 실패");
   }
@@ -188,18 +178,5 @@ onMounted(fetchUserInfo);
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
-}
-
-
-/* ✅ 모달 */
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 </style>
