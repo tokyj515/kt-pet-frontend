@@ -52,6 +52,7 @@
 </template>
 
 
+
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
@@ -118,18 +119,17 @@ onMounted(fetchSitters);
   transform: translateY(-3px);
 }
 
-/* ✅ 카드 헤더 스타일 */
+/* ✅ 카드 헤더 스타일 (수정됨) */
 .card-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  gap: 10px; /* 요소 간 간격 */
+  width: 100%;
 }
 
 /* ✅ 시터 이름 (왼쪽 정렬 유지) */
 .sitter-name {
-  flex-grow: 1;  /* 왼쪽에 고정되도록 설정 */
-  margin: 0;
   font-size: 1.2rem;
   color: #492815; /* 딥 브라운 */
 }
@@ -142,6 +142,7 @@ onMounted(fetchSitters);
   font-size: 0.9rem;
   color: #492815;
   white-space: nowrap;  /* 줄 바꿈 방지 */
+  margin-left: auto; /* 🔥 오른쪽 끝으로 이동 */
 }
 
 /* ✅ 요금 정보 (서비스 컬러 적용) */
@@ -171,7 +172,5 @@ onMounted(fetchSitters);
   padding: 40px;
   color: #666;
 }
-
-
 </style>
 
