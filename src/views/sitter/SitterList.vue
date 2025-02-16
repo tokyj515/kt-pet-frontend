@@ -105,17 +105,7 @@ onMounted(fetchSitters);
 </script>
 
 <style scoped>
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
 
-h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #333;
-}
 
 /* ✅ 시터 리스트 스타일 */
 .sitter-list {
