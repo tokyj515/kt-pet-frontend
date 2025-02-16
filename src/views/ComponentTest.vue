@@ -17,7 +17,7 @@
     <BaseRadio v-model="selectedRadio" label="라디오 선택 중"  :options="radioOptions" />
     <p>선택된 값: {{ selectedRadio }}</p>
 
-    <BaseChip :chips="chipList" label="선택된 칩" @remove-chip="removeChip" />
+    <BaseChip :chips="chipList" label="선택된 칩" removable="true" @remove-chip="removeChip" />
     <p>선택된 칩: {{ chipList }}</p>
 
 

@@ -4,7 +4,7 @@
     <div class="chip-group">
       <span v-for="(chip, index) in chips" :key="index" class="chip">
         {{ chip }}
-        <button class="chip-close" @click="$emit('remove-chip', chip)">×</button>
+        <button v-if="removable" class="chip-close" @click="$emit('remove-chip', chip)">×</button>
       </span>
     </div>
   </div>
@@ -14,6 +14,7 @@
 defineProps({
   label: String,
   chips: Array,
+  removable: { type: Boolean, default: false } // 🔥 X 버튼 표시 여부 (기본값: false)
 });
 
 defineEmits(["remove-chip"]);
@@ -59,6 +60,7 @@ defineEmits(["remove-chip"]);
   background-color: #C6DBDA; /* 살구 */
 }
 
+/* ❌ X 버튼 스타일 */
 .chip-close {
   background: none;
   border: none;
