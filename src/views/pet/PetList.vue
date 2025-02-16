@@ -17,9 +17,10 @@
       >
         <!-- ✅ 수정/삭제 아이콘 -->
         <div class="pet-actions">
-          <i class="fa-solid fa-pen" @click.stop="openEditModal(pet)"></i>
-          <i class="fa-solid fa-trash" @click.stop="openDeleteModal(pet.petId)"></i>
+<!--          <i class="fa-solid fa-pen" @click.stop="openEditModal(pet)"></i> -->
+          <i class="fa-solid fa-xmark" @click.stop="openDeleteModal(pet.petId)"></i>
         </div>
+
 
         <!-- ✅ 카드 컨텐츠 (이미지 + 정보) -->
         <div class="pet-content">
@@ -54,9 +55,10 @@
 
     <!-- ✅ 펫 삭제 모달 -->
     <BaseModal :isOpen="isDeleteModalOpen" title="펫 삭제" @close="closeDeleteModal">
-      <p>정말 삭제하시겠습니까?</p>
+      <p class="delete-warning">정말 삭제하시겠습니까?</p>
       <BaseButton @click="deletePet" :primary="4">삭제</BaseButton>
     </BaseModal>
+
   </div>
 </template>
 
@@ -226,6 +228,7 @@ onMounted(fetchPets);
 .pet-content {
   display: flex;
   width: 100%;
+  height: 110px;
 }
 
 .pet-image {
@@ -257,5 +260,12 @@ onMounted(fetchPets);
   right: 10px;
   display: flex;
   gap: 8px;
+}
+
+.delete-warning {
+  font-size: 16px;
+  color: #D9534F; /* 붉은 계열 경고 색상 */
+  text-align: center;
+  margin: 20px;
 }
 </style>
