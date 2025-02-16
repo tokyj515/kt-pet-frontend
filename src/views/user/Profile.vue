@@ -142,25 +142,23 @@ onMounted(fetchUserInfo);
 </script>
 
 <style scoped>
-.container {
-  text-align: center;
-}
 
 /* ✅ 프로필 카드 */
 .profile-card {
   background: white;
   border-radius: 12px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 20px 20px 10px; /* ⬅ 기존 padding-bottom 줄이기 */
   max-width: 400px;
   margin: auto;
 }
+
 
 .profile-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
 }
 
 .label {
