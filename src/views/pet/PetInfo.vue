@@ -60,7 +60,7 @@ const defaultImage = defaultPetImage;
 
 // ✅ 수정 모달 관련 상태
 const isEditModalOpen = ref(false);
-const editPet = ref({ petId: "", name: "", petType: "", age: "" });
+const editPet = ref({ petId: null, name: "", petType: "", age: 0 });
 
 // ✅ 펫 종류 선택 옵션
 const petOptions = [
@@ -68,10 +68,10 @@ const petOptions = [
   { label: "강아지", value: "강아지" },
 ];
 
-// ✅ 나이 선택 옵션 (0~30살) → 숫자가 아니라 "문자열" 값으로 설정
+// ✅ 나이 선택 옵션 (0~30살) → `Long` 타입으로 변환
 const ageOptions = Array.from({ length: 31 }, (_, i) => ({
   label: `${i}살`,
-  value: String(i),
+  value: i, // 🔥 숫자로 변환 (Long 지원)
 }));
 
 // ✅ 펫 정보 불러오기
@@ -90,13 +90,14 @@ const fetchPetInfo = async () => {
     });
 
     if (response.data?.data) {
-      petInfo.value = response.data.data;
+      petInfo.value = response.data.data || {}; // ✅ 빈 객체로 초기화
+      console.log(response.data);
     } else {
       throw new Error("펫 정보를 찾을 수 없습니다.");
     }
   } catch (error) {
+    console.error("❌ 펫 정보를 불러오는 중 오류 발생:", error);
     alert("펫 정보를 불러오지 못했습니다.");
-    console.error(error);
     router.push("/pet-list");
   } finally {
     loading.value = false;
@@ -107,10 +108,10 @@ const fetchPetInfo = async () => {
 const openEditModal = () => {
   if (petInfo.value) {
     editPet.value = {
-      petId: petInfo.value.petId || "", // ✅ petId가 null이면 빈 문자열 설정
+      petId: petInfo.value.petId ,
       name: petInfo.value.name || "",
       petType: petInfo.value.petType || "고양이",
-      age: petInfo.value.age !== undefined ? String(petInfo.value.age) : "0", // 🔥 숫자를 문자열로 변환
+      age: petInfo.value.age !== undefined ? Number(petInfo.value.age) : 0, // 🔥 숫자로 변환
     };
 
     console.log("🐾 수정할 펫 정보:", editPet.value); // 디버깅 로그 추가
@@ -135,10 +136,10 @@ const updatePet = async () => {
     const token = localStorage.getItem("token");
 
     const petModifyDto = {
-      petId: editPet.value.petId,
+      petId: editPet.value.petId, // ✅ Long 타입 유지
       name: editPet.value.name,
       petType: editPet.value.petType,
-      age: Number(editPet.value.age), // 🔥 문자열을 다시 숫자로 변환
+      age: Number(editPet.value.age), // ✅ Long 타입 변환
     };
 
     await axios.patch("/pet/modify", petModifyDto, {
@@ -160,8 +161,6 @@ const goBack = () => {
 
 onMounted(fetchPetInfo);
 </script>
-
-
 
 <style scoped>
 .container {
@@ -222,17 +221,6 @@ onMounted(fetchPetInfo);
   padding: 10px 0;
   border-bottom: 1px solid #ddd;
   font-size: 18px;
-}
-
-/* ✅ 라벨 스타일 */
-.label {
-  font-weight: bold;
-  color: #555;
-}
-
-/* ✅ 값 스타일 */
-.value {
-  color: #000000;
 }
 
 /* ✅ 버튼 그룹 */
