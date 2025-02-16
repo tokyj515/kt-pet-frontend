@@ -14,6 +14,10 @@
     <!-- ✅ 돌봄 가능 시간 설정 (BaseDayTime 사용) -->
     <BaseDayTime v-model="sitterData.careTimeList" label="돌봄 가능 시간" />
 
+    <!-- ✅ 선택된 돌봄 가능 시간 칩 표시 (chipList가 있을 때만) -->
+    <BaseChip v-if="chipList.length > 0" :chips="chipList" label="선택된 시간" removable="true" @remove-chip="removeChip" />
+
+
     <!-- ✅ 버튼 그룹 -->
     <div class="button-group">
       <BaseButton @click="registerSitter" :primary="4">시터 등록하기</BaseButton>
@@ -22,13 +26,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import axios from "@/api/axios.js";
 import BaseSelect from "@/components/base/BaseSelect.vue";
 import BaseInput from "@/components/base/BaseInput.vue";
 import BaseCheckbox from "@/components/base/BaseCheckbox.vue";
 import BaseDayTime from "@/components/base/BaseDayTime.vue";
+import BaseChip from "@/components/base/BaseChip.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 
 const router = useRouter();
@@ -64,6 +69,21 @@ const sitterData = ref({
     endTime: "",
   })),
 });
+
+// ✅ 칩 리스트 (computed로 관리)
+const chipList = computed(() =>
+    sitterData.value.careTimeList
+        .filter((time) => time.startTime && time.endTime)
+        .map((time) => `${time.day}: ${time.startTime} - ${time.endTime}`)
+);
+
+// ✅ 칩 삭제 (선택한 시간 삭제)
+const removeChip = (chip) => {
+  sitterData.value.careTimeList = sitterData.value.careTimeList.map((time) => {
+    const chipText = `${time.day}: ${time.startTime} - ${time.endTime}`;
+    return chipText === chip ? { ...time, startTime: "", endTime: "" } : time;
+  });
+};
 
 // ✅ 시터 등록 요청
 const registerSitter = async () => {
@@ -109,7 +129,7 @@ const registerSitter = async () => {
 
     if (response.data.success) {
       alert("시터 등록이 완료되었습니다.");
-      router.push("/sitter-profile");
+      router.push("/");
     }
   } catch (error) {
     console.error("🚨 시터 등록 실패:", error);

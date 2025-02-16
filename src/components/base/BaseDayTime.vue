@@ -13,14 +13,7 @@
       </button>
     </div>
 
-    <div class="selected-times">
-      <div v-for="(time, index) in modelValue.filter(t => t.startTime && t.endTime)" :key="index" class="time-display">
-        <span>{{ time.day }}: {{ time.startTime }} - {{ time.endTime }}</span>
-        <i class="fa-solid fa-pen edit-icon" @click="openModal(index)"></i>
-      </div>
-    </div>
-
-    <!-- ✅ BaseModal 적용 -->
+    <!-- ✅ 시간 선택 모달 -->
     <BaseModal :isOpen="isModalOpen" :title="`${modalData.day} 시간 설정`" @close="closeModal">
       <BaseSelect v-model="modalData.startTime" label="시작 시간" :options="hours" />
       <BaseSelect v-model="modalData.endTime" label="종료 시간" :options="hours" />
@@ -30,10 +23,11 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, watch } from "vue";
+import { ref, computed, defineProps, defineEmits, watch } from "vue";
 import BaseSelect from "@/components/base/BaseSelect.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
+import BaseChip from "@/components/base/BaseChip.vue";
 
 const props = defineProps({
   label: String,
@@ -52,6 +46,13 @@ const modalIndex = ref(null);
 
 // ✅ 24시간 선택 가능하도록 변경
 const hours = Array.from({ length: 24 }, (_, i) => ({ label: `${i}:00`, value: `${i}:00` }));
+
+// ✅ 칩 리스트 (computed로 관리)
+const chipList = computed(() =>
+    props.modelValue
+        .filter((time) => time.startTime && time.endTime)
+        .map((time) => `${time.day}: ${time.startTime} - ${time.endTime}`)
+);
 
 // ✅ 모달 열기 (요일 클릭 시)
 const openModal = (index) => {
@@ -74,18 +75,32 @@ const saveTime = () => {
   isModalOpen.value = false;
 };
 
+// ✅ 칩 삭제 (선택한 시간 삭제)
+const removeChip = (chip) => {
+  const newValues = props.modelValue.map((time) => {
+    const chipText = `${time.day}: ${time.startTime} - ${time.endTime}`;
+    return chipText === chip ? { ...time, startTime: "", endTime: "" } : time;
+  });
+
+  console.log("🗑️ 삭제 후 modelValue:", newValues);
+  emit("update:modelValue", newValues);
+};
+
 // ✅ 모달 닫기
 const closeModal = () => {
   isModalOpen.value = false;
 };
 
 // ✅ modelValue 변경 감지
-watch(() => props.modelValue, (newVal) => {
-  if (modalIndex.value !== null) {
-    modalData.value = { ...newVal[modalIndex.value] };
-  }
-}, { deep: true });
-
+watch(
+    () => props.modelValue,
+    (newVal) => {
+      if (modalIndex.value !== null) {
+        modalData.value = { ...newVal[modalIndex.value] };
+      }
+    },
+    { deep: true }
+);
 </script>
 
 <style scoped>
@@ -119,9 +134,5 @@ watch(() => props.modelValue, (newVal) => {
 
 .day-btn.active {
   background: #FED7C3;
-}
-
-.edit-icon {
-  cursor: pointer;
 }
 </style>
