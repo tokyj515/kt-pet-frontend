@@ -33,7 +33,10 @@
         <p>내 목록</p>
       </div>
 
-
+    </div>
+    <br>
+    <br>
+    <div v-if="isAdmin" class="grid-container">
       <!-- 🟢 ROLE_ADMIN 권한이 있을 때만 보이는 카드 -->
       <div v-if="isAdmin" class="card" @click="goToSitterProfile">
         <HomeIcon class="icon" />
