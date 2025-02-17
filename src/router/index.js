@@ -12,7 +12,8 @@ import SitterProfile from "@/views/sitter/SitterProfile.vue"; // ✅ 펫 상세�
 import SitterList from "@/views/sitter/SitterList.vue";
 import PaymentTest from "@/views/payment/PaymentTest.vue";
 import ComponentTest from "@/views/ComponentTest.vue";
-import SitterMyProfile from "@/views/user/SitterMyProfile.vue";  // 추가
+import SitterMyProfile from "@/views/user/SitterMyProfile.vue";
+import CodeManage from "@/views/code/CodeManage.vue";  // 추가
 
 const routes = [
     { path: "/", component: Main },
@@ -28,6 +29,7 @@ const routes = [
     { path: "/sitter/profile/me", component: SitterMyProfile },
     { path: "/sitter-list", component: SitterList },
     { path: "/payment-test", component: PaymentTest },
+    { path: "/code-manage", component: CodeManage },
     { path: "/component-test", component: ComponentTest },
 ];
 

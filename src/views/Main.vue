@@ -38,13 +38,19 @@
         <CreditCardIcon class="icon" />
         <p>결제하기</p>
       </div>
+
+      <!-- 코드 관리 화면 이동 카드 -->
+      <div class="card" @click="goToCodeManage">
+        <AxeIcon class="icon" />
+        <p>코드 관리</p>
+      </div>
     </div>
   </div>
-</template>
 
+</template>
 <script setup>
 import { useRouter } from "vue-router";
-import { User as UserIcon, PawPrint as PawPrintIcon, ShoppingCart as ShoppingCartIcon, Home as HomeIcon, Users as UsersIcon, CreditCard as CreditCardIcon } from "lucide-vue-next";
+import { User as UserIcon, PawPrint as PawPrintIcon, ShoppingCart as ShoppingCartIcon, Home as HomeIcon, Users as UsersIcon, CreditCard as CreditCardIcon, Axe as AxeIcon } from "lucide-vue-next";
 
 const router = useRouter();
 
@@ -54,6 +60,7 @@ const goToShopping = () => router.push("/shopping");
 const goToSitterProfile = () => router.push("/sitter/profile/me");
 const goToSitterList = () => router.push("/sitter-list");
 const goToPaymentTest = () => router.push("/payment-test");
+const goToCodeManage = () => router.push("/code-manage");
 </script>
 
 <style scoped>
