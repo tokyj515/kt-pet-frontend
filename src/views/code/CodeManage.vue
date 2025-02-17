@@ -55,11 +55,11 @@
             v-for="(detail, index) in selectedGroupDetails || []"
             :key="index"
             @click="selectDetail(detail)"
-            :class="{ selected: selectedDetail?.id === detail.id }"
+            :class="{ selected: selectedDetail?.codeId === detail.codeId }"
         >
           <td>{{ index + 1 }}</td>
           <td>{{ detail.name }}</td>
-          <td>{{ detail.id }}</td>
+          <td>{{ detail.codeId }}</td>
           <td>{{ detail.description }}</td>
         </tr>
         </tbody>
@@ -83,7 +83,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import axios from "@/api/axios.js"; // ✅ API 호출을 위한 axios 인스턴스
+import axios from "@/api/axios.js";
 import BaseInput from "@/components/base/BaseInput.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
@@ -93,12 +93,12 @@ const codeDetails = ref({});
 const selectedGroup = ref(null);
 const selectedDetail = ref(null);
 
-const newGroupName = ref(""); // ✅ 새 그룹명 입력
-const isGroupModalOpen = ref(false); // ✅ 그룹 추가 모달 상태
+const newGroupName = ref("");
+const isGroupModalOpen = ref(false);
 
-const newCodeName = ref(""); // ✅ 새 코드명 입력
-const newCodeDescription = ref(""); // ✅ 새 코드설명 입력
-const isCodeModalOpen = ref(false); // ✅ 코드 추가 모달 상태
+const newCodeName = ref("");
+const newCodeDescription = ref("");
+const isCodeModalOpen = ref(false);
 
 /* ✅ 코드 그룹 목록 불러오기 */
 const fetchCodeGroups = async () => {
@@ -131,7 +131,11 @@ const fetchCodeDetails = async (codeGroupId) => {
     const response = await axios.get(`/code/group/${codeGroupId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    codeDetails.value[codeGroupId] = response.data.data?.codes || [];
+    codeDetails.value[codeGroupId] = response.data.data?.codes.map(code => ({
+      codeId: code.codeId, // ✅ 코드 ID 기준으로 데이터 저장
+      name: code.name,
+      description: code.description,
+    })) || [];
   } catch (error) {
     console.error("🚨 코드 상세 불러오기 실패:", error);
   }
@@ -145,87 +149,36 @@ const selectGroup = async (group) => {
   await fetchCodeDetails(group.id);
 };
 
+/* ✅ 코드 상세 선택 */
+const selectDetail = (detail) => {
+  selectedDetail.value = detail;
+};
+
 /* ✅ 선택한 코드 그룹의 코드 목록 */
 const selectedGroupDetails = computed(() => {
   return selectedGroup.value ? codeDetails.value[selectedGroup.value.id] || [] : [];
 });
 
-/* ✅ 그룹 추가 모달 열기 */
-const openGroupModal = () => {
-  newGroupName.value = "";
-  isGroupModalOpen.value = true;
-};
-
-/* ✅ 그룹 추가 모달 닫기 */
-const closeGroupModal = () => {
-  isGroupModalOpen.value = false;
-};
-
-/* ✅ 코드 추가 모달 열기 */
-const openCodeModal = () => {
-  newCodeName.value = "";
-  newCodeDescription.value = "";
-  isCodeModalOpen.value = true;
-};
-
-/* ✅ 코드 추가 모달 닫기 */
-const closeCodeModal = () => {
-  isCodeModalOpen.value = false;
-};
-
-/* ✅ 코드 그룹 추가 */
-const saveGroup = async () => {
-  if (!newGroupName.value.trim()) {
-    alert("그룹명을 입력하세요.");
+/* ✅ 코드 삭제 */
+const removeDetail = async () => {
+  if (!selectedDetail.value) {
+    alert("삭제할 코드를 선택하세요.");
     return;
   }
 
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.post("/code/group", { name: newGroupName.value }, {
+    const response = await axios.post(`/code/delete/${selectedDetail.value.codeId}`, {}, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
     if (response.data.code === 200) {
-      alert("그룹이 추가되었습니다.");
-      closeGroupModal();
-      await fetchCodeGroups();
-    } else {
-      alert("그룹 추가 실패: " + response.data.message);
-    }
-  } catch (error) {
-    console.error("🚨 코드 그룹 추가 실패:", error);
-  }
-};
-
-/* ✅ 코드 추가 */
-const saveCode = async () => {
-  if (!selectedGroup.value) {
-    alert("코드 그룹을 먼저 선택하세요.");
-    return;
-  }
-  if (!newCodeName.value.trim()) {
-    alert("코드명을 입력하세요.");
-    return;
-  }
-
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.post("/code", {
-      codeGroupId: selectedGroup.value.id,
-      name: newCodeName.value,
-      description: newCodeDescription.value,
-    }, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (response.data.code === 200) {
-      alert("코드가 추가되었습니다.");
-      closeCodeModal();
+      alert("코드가 삭제되었습니다.");
+      selectedDetail.value = null;
       fetchCodeDetails(selectedGroup.value.id);
     }
   } catch (error) {
-    console.error("🚨 코드 추가 실패:", error);
+    console.error("🚨 코드 삭제 실패:", error);
   }
 };
 
