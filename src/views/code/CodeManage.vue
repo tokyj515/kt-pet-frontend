@@ -166,6 +166,9 @@ const removeGroup = async () => {
     return;
   }
 
+  const confirmDelete = confirm(`정말 "${selectedGroup.value.name}" 코드 그룹을 삭제하시겠습니까?\n(포함된 코드도 함께 삭제됩니다.)`);
+  if (!confirmDelete) return;
+
   const token = localStorage.getItem("token");
   const groupId = selectedGroup.value.id;
   const codesToDelete = codeDetails.value[groupId] || [];
@@ -193,12 +196,16 @@ const removeGroup = async () => {
   }
 };
 
-/* ✅ 코드 삭제 */
+
+/* ✅ 코드 삭제 (삭제 확인 얼럿 추가) */
 const removeDetail = async () => {
   if (!selectedDetail.value) {
     alert("삭제할 코드를 선택하세요.");
     return;
   }
+
+  const confirmDelete = confirm(`정말 "${selectedDetail.value.name}" 코드를 삭제하시겠습니까?`);
+  if (!confirmDelete) return;
 
   try {
     const token = localStorage.getItem("token");
@@ -215,6 +222,7 @@ const removeDetail = async () => {
     console.error("🚨 코드 삭제 실패:", error);
   }
 };
+
 
 /* ✅ 페이지 로딩 시 코드 그룹 불러오기 */
 onMounted(fetchCodeGroups);
