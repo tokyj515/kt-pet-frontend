@@ -21,6 +21,19 @@
         <p>쇼핑몰</p>
       </div>
 
+      <!-- 펫시터 목록은 모든 사용자에게 보임 -->
+      <div class="card" @click="goToSitterList">
+        <UsersIcon class="icon" />
+        <p>펫시터 목록</p>
+      </div>
+
+      <!-- 사용자가 예약한 목록 -->
+      <div class="card" @click="goToReservationMyList">
+        <UsersIcon class="icon" />
+        <p>내 목록</p>
+      </div>
+
+
       <!-- 🟢 ROLE_ADMIN 권한이 있을 때만 보이는 카드 -->
       <div v-if="isAdmin" class="card" @click="goToSitterProfile">
         <HomeIcon class="icon" />
@@ -29,7 +42,7 @@
 
       <div v-if="isAdmin" class="card" @click="goToReservationRequestList">
         <UsersIcon class="icon" />
-        <p>나의 신청 목록</p>
+        <p>펫시터 예약 목록</p>
       </div>
 
       <!-- 🟢 ROLE_ADMIN 전용 기능 -->
@@ -43,11 +56,6 @@
         <p>코드 관리</p>
       </div>
 
-      <!-- 펫시터 목록은 모든 사용자에게 보임 -->
-      <div class="card" @click="goToSitterList">
-        <UsersIcon class="icon" />
-        <p>펫시터 목록</p>
-      </div>
     </div>
   </div>
 </template>
@@ -82,6 +90,7 @@ const goToSitterList = () => router.push("/sitter-list");
 const goToPaymentTest = () => router.push("/payment-test");
 const goToCodeManage = () => router.push("/code-manage");
 const goToReservationRequestList = () => router.push("/reservation/request/list");
+const goToReservationMyList = () => router.push("/reservation/list");
 
 </script>
 
