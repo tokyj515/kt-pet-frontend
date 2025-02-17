@@ -29,7 +29,7 @@
     <!-- ✅ 버튼 그룹 -->
     <div class="button-group">
       <BaseButton @click="openEditModal" :primary="2">정보 수정</BaseButton>
-      <BaseButton @click="goBack" :primary="3">뒤로 가기</BaseButton>
+      <BaseButton @click="goBack" >뒤로 가기</BaseButton>
     </div>
 
     <!-- ✅ 펫 정보 수정 모달 -->

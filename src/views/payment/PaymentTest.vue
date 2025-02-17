@@ -2,7 +2,7 @@
   <div class="container">
     <h2>간편결제</h2>
     <BaseButton @click="onPayment" :primary="2">결제하기</BaseButton>
-    <BaseButton @click="goBack" :primary="3">뒤로 가기</BaseButton>
+    <BaseButton @click="goBack" >뒤로 가기</BaseButton>
   </div>
 </template>
 <script setup>

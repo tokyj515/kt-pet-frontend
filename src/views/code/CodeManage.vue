@@ -79,6 +79,10 @@
       <BaseButton @click="saveCode" class="w-full" :primary="4">저장</BaseButton>
     </BaseModal>
   </div>
+
+  <div class="button-group">
+    <BaseButton @click="goBack" >뒤로 가기</BaseButton>
+  </div>
 </template>
 
 <script setup>
@@ -99,6 +103,14 @@ const isGroupModalOpen = ref(false);
 const newCodeName = ref("");
 const newCodeDescription = ref("");
 const isCodeModalOpen = ref(false);
+
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+// ✅ 뒤로 가기
+const goBack = () => {
+  router.push("/");
+};
 
 /* ✅ 코드 그룹 목록 불러오기 */
 const fetchCodeGroups = async () => {
@@ -367,6 +379,15 @@ onMounted(fetchCodeGroups);
 
 .code-table tr.selected {
   background: #e0f7fa;
+}
+
+/* ✅ 버튼 그룹 */
+.button-group {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 10%;
 }
 
 </style>

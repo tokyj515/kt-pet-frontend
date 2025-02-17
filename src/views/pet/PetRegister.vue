@@ -12,11 +12,11 @@
       <BaseSelect v-model="age" label="나이" :options="ageOptions" required />
 
       <!-- ✅ 등록 버튼 -->
-      <BaseButton type="submit" class="mt-4" :primary="4">등록하기</BaseButton>
+      <BaseButton type="submit" :primary="4">등록하기</BaseButton>
     </form>
 
     <!-- ✅ 취소 버튼 -->
-    <BaseButton @click="goBack" class="mt-2" :primary="3">취소</BaseButton>
+    <BaseButton @click="goBack" :primary="3">취소</BaseButton>
   </div>
 </template>
 

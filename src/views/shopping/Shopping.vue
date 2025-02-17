@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h2>쇼핑몰입니다</h2>
-    <BaseButton @click="goBack" :primary="3">뒤로 가기</BaseButton>
+    <BaseButton @click="goBack" >뒤로 가기</BaseButton>
   </div>
 </template>
 

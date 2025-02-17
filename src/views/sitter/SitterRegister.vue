@@ -20,7 +20,7 @@
 
     <!-- ✅ 버튼 그룹 -->
     <div class="button-group">
-      <BaseButton @click="goBack" :primary="3">뒤로 가기</BaseButton>
+      <BaseButton @click="goBack" >뒤로 가기</BaseButton>
       <BaseButton @click="registerSitter" :primary="4">시터 등록하기</BaseButton>
       <!-- ✅ 뒤로 가기 버튼 -->
     </div>

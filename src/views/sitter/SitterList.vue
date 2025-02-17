@@ -50,7 +50,7 @@
     </div>
 
     <!-- ✅ 뒤로 가기 버튼 -->
-    <BaseButton @click="goBack" :primary="3">뒤로 가기</BaseButton>
+    <BaseButton @click="goBack" >뒤로 가기</BaseButton>
   </div>
 </template>
 
