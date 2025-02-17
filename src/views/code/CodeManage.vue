@@ -1,5 +1,5 @@
 <template>
-  <div :class="['container-color', 'code-manager-container']">
+  <div class="code-manager-container">
     <!-- ✅ 코드 그룹 (세로 길게) -->
     <div class="code-group">
       <div class="header">
@@ -19,10 +19,10 @@
         </thead>
         <tbody>
         <tr
-            v-for="(group, index) in codeGroups"
+            v-for="(group, index) in codeGroups || []"
             :key="index"
             @click="selectGroup(group)"
-            :class="{ selected: selectedGroup === group }"
+            :class="{ selected: selectedGroup?.id === group.id }"
         >
           <td>{{ group.name }}</td>
           <td>{{ group.id }}</td>
@@ -31,7 +31,7 @@
       </table>
     </div>
 
-    <!-- ✅ 코드 상세 (그룹 선택 시만 보이도록 설정) -->
+    <!-- ✅ 코드 상세 (그룹 선택 시만 표시) -->
     <div v-if="selectedGroup" class="code-detail">
       <div class="header">
         <h3>{{ selectedGroup.name }} - 코드 리스트</h3>
@@ -52,10 +52,10 @@
         </thead>
         <tbody>
         <tr
-            v-for="(detail, index) in selectedGroupDetails"
+            v-for="(detail, index) in selectedGroupDetails || []"
             :key="index"
             @click="selectDetail(detail)"
-            :class="{ selected: selectedDetail === detail }"
+            :class="{ selected: selectedDetail?.id === detail.id }"
         >
           <td>{{ index + 1 }}</td>
           <td>{{ detail.name }}</td>
@@ -85,24 +85,36 @@ const codeGroups = ref([]);
 const codeDetails = ref({});
 const selectedGroup = ref(null);
 const selectedDetail = ref(null);
-const newGroupName = ref(""); // ✅ 새 코드 그룹명
-const isGroupModalOpen = ref(false); // ✅ 코드 그룹 추가 모달 상태
+const newGroupName = ref("");
+const isGroupModalOpen = ref(false);
 
 /* ✅ 코드 그룹 목록 불러오기 */
 const fetchCodeGroups = async () => {
   try {
     const response = await axios.get("/code/group/list");
-    codeGroups.value = response.data.data;
+    console.log("✅ API 응답 데이터:", response.data);
+
+    if (response.data.code === 200 && Array.isArray(response.data.data)) {
+      codeGroups.value = response.data.data.map(group => ({
+        id: group.codeGroupId,
+        name: group.name,
+      }));
+    } else {
+      console.error("🚨 API 응답 데이터 형식 오류:", response.data);
+      codeGroups.value = [];
+    }
   } catch (error) {
     console.error("🚨 코드 그룹 불러오기 실패:", error);
+    codeGroups.value = [];
   }
 };
 
 /* ✅ 선택한 코드 그룹의 상세 코드 불러오기 */
 const fetchCodeDetails = async (codeGroupId) => {
+  if (!codeGroupId) return;
   try {
     const response = await axios.get(`/code/group/${codeGroupId}`);
-    codeDetails.value[codeGroupId] = response.data.data.codes || [];
+    codeDetails.value[codeGroupId] = response.data.data?.codes || [];
   } catch (error) {
     console.error("🚨 코드 상세 불러오기 실패:", error);
   }
@@ -110,6 +122,7 @@ const fetchCodeDetails = async (codeGroupId) => {
 
 /* ✅ 코드 그룹 선택 */
 const selectGroup = async (group) => {
+  if (!group) return;
   selectedGroup.value = group;
   selectedDetail.value = null;
   await fetchCodeDetails(group.id);
@@ -122,7 +135,7 @@ const selectedGroupDetails = computed(() => {
 
 /* ✅ 코드 그룹 추가 모달 열기 */
 const openGroupModal = () => {
-  newGroupName.value = ""; // 입력 필드 초기화
+  newGroupName.value = "";
   isGroupModalOpen.value = true;
 };
 
@@ -137,13 +150,14 @@ const saveGroup = async () => {
     alert("그룹명을 입력하세요.");
     return;
   }
-  const newGroup = { name: newGroupName.value, id: `group${Date.now()}` };
+
   try {
-    const response = await axios.post("/code/group", newGroup);
+    const response = await axios.post("/code/group", { name: newGroupName.value });
+
     if (response.data.code === 200) {
       alert("그룹이 추가되었습니다.");
       closeGroupModal();
-      fetchCodeGroups();
+      await fetchCodeGroups();
     } else {
       alert("그룹 추가 실패: " + response.data.message);
     }
@@ -169,31 +183,23 @@ onMounted(fetchCodeGroups);
 </script>
 
 <style scoped>
-/* ✅ 버튼 그룹 */
-.button-group {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-  width: 40%;
-}
-
 .code-manager-container {
   display: flex;
   gap: 20px;
   padding: 20px;
   margin: 0 10%;
   background: #f9f9f9;
-  align-items: flex-start; /* ✅ 세로 배치 */
+  align-items: flex-start;
 }
 
 .code-group {
-  flex: 0.5; /* ✅ 세로로 길게 배치 */
+  flex: 0.5;
   background: white;
   padding: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
   min-height: 600px !important;
-  height: 100%; /* ✅ 길게 설정 */
+  height: 100%;
   overflow-y: auto;
 }
 
@@ -227,10 +233,5 @@ onMounted(fetchCodeGroups);
 
 .code-table tr.selected {
   background: #e0f7fa;
-}
-
-.save-btn {
-  align-self: flex-end;
-  width: 100%;
 }
 </style>
