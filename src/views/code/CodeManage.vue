@@ -1,5 +1,5 @@
 <template>
-  <div class="code-manager-container">
+  <div :class="['container-color', 'code-manager-container']">
     <!-- ✅ 코드 그룹 -->
     <div class="code-group">
       <div class="header">
@@ -160,10 +160,19 @@ const saveDetail = () => {
 </script>
 
 <style scoped>
+/* ✅ 버튼 그룹 */
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  width: 40%;
+}
+
 .code-manager-container {
   display: flex;
   gap: 20px;
   padding: 20px;
+  margin: 0 10%;
   background: #f9f9f9;
 }
 
