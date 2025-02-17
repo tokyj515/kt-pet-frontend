@@ -32,7 +32,7 @@
     </div>
 
     <!-- ✅ 코드 상세 -->
-    <div v-if="selectedGroup" class="code-detail">
+    <div v-if="selectedGroup" :class="['code-detail', { visible: selectedGroup }]">
       <div class="header">
         <h3>{{ selectedGroup.name }} - 코드 리스트</h3>
         <div>
@@ -146,7 +146,7 @@ const fetchCodeDetails = async (codeGroupId) => {
   }
 };
 
-/* ✅ 코드 그룹 선택 */
+
 /* ✅ 코드 그룹 선택 (선택 시 자동으로 코드 리스트 불러오기) */
 const selectGroup = async (group) => {
   if (!group) return;
@@ -321,25 +321,22 @@ onMounted(fetchCodeGroups);
   align-items: flex-start;
 }
 
-.code-group {
-  flex: 0.5;
+.code-group, .code-detail {
+  flex: 1; /* 🔥 두 개의 영역을 동일한 크기로 설정 */
   background: white;
   padding: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  min-height: 600px !important;
+  min-height: 600px;
   height: 100%;
-  overflow-y: auto;
 }
 
 .code-detail {
-  flex: 0.5;
-  background: white;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
+  visibility: hidden; /* 🔥 초기에 보이지 않게 설정 */
+}
+
+.code-detail.visible {
+  visibility: visible; /* 🔥 그룹 선택 시 보이도록 변경 */
 }
 
 .header {
@@ -363,4 +360,5 @@ onMounted(fetchCodeGroups);
 .code-table tr.selected {
   background: #e0f7fa;
 }
+
 </style>
