@@ -132,7 +132,7 @@ const fetchCodeDetails = async (codeGroupId) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     codeDetails.value[codeGroupId] = response.data.data?.codes.map(code => ({
-      codeId: code.codeId, // ✅ 코드 ID 기준으로 데이터 저장
+      codeId: code.codeId,
       name: code.name,
       description: code.description,
     })) || [];
@@ -158,6 +158,40 @@ const selectDetail = (detail) => {
 const selectedGroupDetails = computed(() => {
   return selectedGroup.value ? codeDetails.value[selectedGroup.value.id] || [] : [];
 });
+
+/* ✅ 코드 그룹 삭제 (코드도 함께 삭제) */
+const removeGroup = async () => {
+  if (!selectedGroup.value) {
+    alert("삭제할 코드 그룹을 선택하세요.");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+  const groupId = selectedGroup.value.id;
+  const codesToDelete = codeDetails.value[groupId] || [];
+
+  try {
+    // ✅ 1. 해당 그룹 내 코드 삭제
+    for (const code of codesToDelete) {
+      await axios.post(`/code/delete/${code.codeId}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    }
+
+    // ✅ 2. 그룹 삭제
+    const response = await axios.post(`/code/group/delete/${groupId}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.data.code === 200) {
+      alert("코드 그룹과 포함된 코드가 삭제되었습니다.");
+      selectedGroup.value = null;
+      fetchCodeGroups();
+    }
+  } catch (error) {
+    console.error("🚨 코드 그룹 삭제 실패:", error);
+  }
+};
 
 /* ✅ 코드 삭제 */
 const removeDetail = async () => {
@@ -185,6 +219,7 @@ const removeDetail = async () => {
 /* ✅ 페이지 로딩 시 코드 그룹 불러오기 */
 onMounted(fetchCodeGroups);
 </script>
+
 
 <style scoped>
 .code-manager-container {
