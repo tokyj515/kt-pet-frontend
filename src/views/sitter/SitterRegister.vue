@@ -138,6 +138,7 @@ const registerSitter = async () => {
     } else {
       console.warn("❌ 서버 응답에서 code가 200이 아님:", response.data);
       alert(response.data.message || "시터 등록이 실패했습니다.");
+      return router.push("/sitter/profile/me");
     }
   } catch (error) {
     console.error("🚨 시터 등록 실패:", error);
