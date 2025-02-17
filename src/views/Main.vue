@@ -38,23 +38,23 @@
     <br>
     <div v-if="isAdmin" class="grid-container">
       <!-- 🟢 ROLE_ADMIN 권한이 있을 때만 보이는 카드 -->
-      <div v-if="isAdmin" class="card" @click="goToSitterProfile">
+      <div v-if="isAdmin" class="card-admin" @click="goToSitterProfile">
         <HomeIcon class="icon" />
         <p>펫시터 프로필</p>
       </div>
 
-      <div v-if="isAdmin" class="card" @click="goToReservationRequestList">
+      <div v-if="isAdmin" class="card-admin" @click="goToReservationRequestList">
         <UsersIcon class="icon" />
         <p>펫시터 예약 목록</p>
       </div>
 
       <!-- 🟢 ROLE_ADMIN 전용 기능 -->
-      <div v-if="isAdmin" class="card" @click="goToPaymentTest">
+      <div v-if="isAdmin" class="card-admin" @click="goToPaymentTest">
         <CreditCardIcon class="icon" />
         <p>결제하기 예제</p>
       </div>
 
-      <div v-if="isAdmin" class="card" @click="goToCodeManage">
+      <div v-if="isAdmin" class="card-admin" @click="goToCodeManage">
         <AxeIcon class="icon" />
         <p>코드 관리</p>
       </div>
@@ -122,7 +122,23 @@ const goToReservationMyList = () => router.push("/reservation/list");
   transition: transform 0.2s ease-in-out;
 }
 
+.card-admin {
+  background: rgba(255, 206, 185, 0.5);
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
 .card:hover {
+  transform: scale(1.05);
+}
+
+.card-admin:hover {
   transform: scale(1.05);
 }
 
