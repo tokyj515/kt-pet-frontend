@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2>펫시터 등록</h2>
+    <h2>펫시터로 등록</h2>
 
     <!-- ✅ 위치 선택 -->
     <BaseSelect v-model="sitterData.location" label="위치" :options="locationOptions" />
@@ -20,7 +20,9 @@
 
     <!-- ✅ 버튼 그룹 -->
     <div class="button-group">
+      <BaseButton @click="goBack" :primary="3">뒤로 가기</BaseButton>
       <BaseButton @click="registerSitter" :primary="4">시터 등록하기</BaseButton>
+      <!-- ✅ 뒤로 가기 버튼 -->
     </div>
   </div>
 </template>
@@ -141,6 +143,11 @@ const registerSitter = async () => {
     console.error("🚨 시터 등록 실패:", error);
     alert(error.response?.data?.message || "시터 등록에 실패했습니다.");
   }
+};
+
+// ✅ 뒤로 가기
+const goBack = () => {
+  router.push("/");
 };
 
 </script>

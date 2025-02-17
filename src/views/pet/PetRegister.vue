@@ -37,6 +37,8 @@ const router = useRouter();
 const petOptions = [
   { label: "고양이", value: "고양이" },
   { label: "강아지", value: "강아지" },
+  { label: "토끼", value: "토끼" },
+  { label: "새", value: "새" },
 ];
 
 // ✅ 나이 선택 옵션 (0~30살)
