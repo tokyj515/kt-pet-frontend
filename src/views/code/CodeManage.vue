@@ -1,11 +1,11 @@
 <template>
   <div :class="['container-color', 'code-manager-container']">
-    <!-- ✅ 코드 그룹 -->
+    <!-- ✅ 코드 그룹 (세로 길게) -->
     <div class="code-group">
       <div class="header">
         <h3>코드 그룹</h3>
         <div>
-          <BaseButton @click="addGroup" :primary="4">+ 추가</BaseButton>
+          <BaseButton @click="openGroupModal" :primary="4">+ 추가</BaseButton>
           <BaseButton @click="removeGroup" :primary="3">- 삭제</BaseButton>
         </div>
       </div>
@@ -31,10 +31,10 @@
       </table>
     </div>
 
-    <!-- ✅ 코드 상세 -->
-    <div class="code-detail">
+    <!-- ✅ 코드 상세 (그룹 선택 시만 보이도록 설정) -->
+    <div v-if="selectedGroup" class="code-detail">
       <div class="header">
-        <h3>코드 상세</h3>
+        <h3>{{ selectedGroup.name }} - 코드 리스트</h3>
         <div>
           <BaseButton @click="addDetail" :primary="4">+ 추가</BaseButton>
           <BaseButton @click="removeDetail" :primary="3">- 삭제</BaseButton>
@@ -64,16 +64,13 @@
         </tr>
         </tbody>
       </table>
-
-      <!-- ✅ 코드 상세 입력 폼 -->
-      <div class="detail-form">
-        <BaseInput v-model="detailForm.name" label="코드명" placeholder="코드명을 입력하세요" />
-        <BaseInput v-model="detailForm.id" label="코드ID" placeholder="코드 ID를 입력하세요" />
-        <BaseInput v-model="detailForm.description" label="코드설명" placeholder="코드 설명을 입력하세요" />
-        <BaseInput v-model="detailForm.order" label="순서" type="number" min="1" />
-        <BaseButton @click="saveDetail" class="save-btn">저장</BaseButton>
-      </div>
     </div>
+
+    <!-- ✅ 코드 그룹 추가 모달 -->
+    <BaseModal :isOpen="isGroupModalOpen" title="코드 그룹 추가" @close="closeGroupModal">
+      <BaseInput v-model="newGroupName" label="그룹명" placeholder="그룹명을 입력하세요" />
+      <BaseButton @click="saveGroup" class="w-full" :primary="4">저장</BaseButton>
+    </BaseModal>
   </div>
 </template>
 
@@ -82,12 +79,14 @@ import { ref, computed, onMounted } from "vue";
 import axios from "@/api/axios.js"; // ✅ API 호출을 위한 axios 인스턴스
 import BaseInput from "@/components/base/BaseInput.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
+import BaseModal from "@/components/base/BaseModal.vue";
 
 const codeGroups = ref([]);
 const codeDetails = ref({});
 const selectedGroup = ref(null);
 const selectedDetail = ref(null);
-const detailForm = ref({ name: "", id: "", description: "", order: 1 });
+const newGroupName = ref(""); // ✅ 새 코드 그룹명
+const isGroupModalOpen = ref(false); // ✅ 코드 그룹 추가 모달 상태
 
 /* ✅ 코드 그룹 목록 불러오기 */
 const fetchCodeGroups = async () => {
@@ -121,12 +120,33 @@ const selectedGroupDetails = computed(() => {
   return selectedGroup.value ? codeDetails.value[selectedGroup.value.id] || [] : [];
 });
 
+/* ✅ 코드 그룹 추가 모달 열기 */
+const openGroupModal = () => {
+  newGroupName.value = ""; // 입력 필드 초기화
+  isGroupModalOpen.value = true;
+};
+
+/* ✅ 코드 그룹 추가 모달 닫기 */
+const closeGroupModal = () => {
+  isGroupModalOpen.value = false;
+};
+
 /* ✅ 코드 그룹 추가 */
-const addGroup = async () => {
-  const newGroup = { name: "새 그룹", id: `group${Date.now()}` };
+const saveGroup = async () => {
+  if (!newGroupName.value.trim()) {
+    alert("그룹명을 입력하세요.");
+    return;
+  }
+  const newGroup = { name: newGroupName.value, id: `group${Date.now()}` };
   try {
-    await axios.post("/code/group", newGroup);
-    fetchCodeGroups();
+    const response = await axios.post("/code/group", newGroup);
+    if (response.data.code === 200) {
+      alert("그룹이 추가되었습니다.");
+      closeGroupModal();
+      fetchCodeGroups();
+    } else {
+      alert("그룹 추가 실패: " + response.data.message);
+    }
   } catch (error) {
     console.error("🚨 코드 그룹 추가 실패:", error);
   }
@@ -141,46 +161,6 @@ const removeGroup = async () => {
     selectedGroup.value = null;
   } catch (error) {
     console.error("🚨 코드 그룹 삭제 실패:", error);
-  }
-};
-
-/* ✅ 코드 상세 추가 */
-const addDetail = async () => {
-  if (!selectedGroup.value) return;
-  const newCode = {
-    groupId: selectedGroup.value.id,
-    name: "새 코드",
-    id: `code${Date.now()}`,
-    description: "",
-  };
-  try {
-    await axios.post("/code", newCode);
-    fetchCodeDetails(selectedGroup.value.id);
-  } catch (error) {
-    console.error("🚨 코드 추가 실패:", error);
-  }
-};
-
-/* ✅ 코드 상세 삭제 */
-const removeDetail = async () => {
-  if (!selectedDetail.value) return;
-  try {
-    await axios.post(`/code/delete/${selectedDetail.value.id}`);
-    fetchCodeDetails(selectedGroup.value.id);
-    selectedDetail.value = null;
-  } catch (error) {
-    console.error("🚨 코드 삭제 실패:", error);
-  }
-};
-
-/* ✅ 코드 상세 저장 */
-const saveDetail = async () => {
-  if (!selectedDetail.value) return;
-  try {
-    await axios.post("/code/modify", { ...detailForm.value, groupId: selectedGroup.value.id });
-    fetchCodeDetails(selectedGroup.value.id);
-  } catch (error) {
-    console.error("🚨 코드 수정 실패:", error);
   }
 };
 
@@ -203,14 +183,28 @@ onMounted(fetchCodeGroups);
   padding: 20px;
   margin: 0 10%;
   background: #f9f9f9;
+  align-items: flex-start; /* ✅ 세로 배치 */
 }
 
-.code-group, .code-detail {
-  flex: 1;
+.code-group {
+  flex: 0.5; /* ✅ 세로로 길게 배치 */
   background: white;
   padding: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  min-height: 600px !important;
+  height: 100%; /* ✅ 길게 설정 */
+  overflow-y: auto;
+}
+
+.code-detail {
+  flex: 0.5;
+  background: white;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
@@ -233,13 +227,6 @@ onMounted(fetchCodeGroups);
 
 .code-table tr.selected {
   background: #e0f7fa;
-}
-
-.detail-form {
-  margin-top: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 .save-btn {
