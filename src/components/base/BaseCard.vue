@@ -24,9 +24,10 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   padding: 24px;
   transition: transform 0.2s;
-  max-width: 80%;
+  max-width: 95%;
   margin: 0 auto;
   width: 100%;
+  //margin-bottom: 16px;
 }
 
 .base-card:hover {
