@@ -78,85 +78,114 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import axios from "@/api/axios.js"; // ✅ API 호출을 위한 axios 인스턴스
 import BaseInput from "@/components/base/BaseInput.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 
-// ✅ 코드 그룹 데이터
-const codeGroups = ref([
-  { name: "동물구분", id: "anmctg" },
-  { name: "개 품종", id: "dogctg" },
-  { name: "고양이 품종", id: "catctg" },
-]);
-
-// ✅ 코드 상세 데이터
-const codeDetails = ref({
-  anmctg: [{ name: "메뉴관리", id: "menu", description: "메뉴 관련 관리" }],
-  dogctg: [{ name: "회원관리", id: "member", description: "회원 관련 관리" }],
-  catctg: [],
-});
-
+const codeGroups = ref([]);
+const codeDetails = ref({});
 const selectedGroup = ref(null);
 const selectedDetail = ref(null);
 const detailForm = ref({ name: "", id: "", description: "", order: 1 });
 
-// ✅ 선택한 그룹의 코드 상세 목록 반환
+/* ✅ 코드 그룹 목록 불러오기 */
+const fetchCodeGroups = async () => {
+  try {
+    const response = await axios.get("/code/group/list");
+    codeGroups.value = response.data.data;
+  } catch (error) {
+    console.error("🚨 코드 그룹 불러오기 실패:", error);
+  }
+};
+
+/* ✅ 선택한 코드 그룹의 상세 코드 불러오기 */
+const fetchCodeDetails = async (codeGroupId) => {
+  try {
+    const response = await axios.get(`/code/group/${codeGroupId}`);
+    codeDetails.value[codeGroupId] = response.data.data.codes || [];
+  } catch (error) {
+    console.error("🚨 코드 상세 불러오기 실패:", error);
+  }
+};
+
+/* ✅ 코드 그룹 선택 */
+const selectGroup = async (group) => {
+  selectedGroup.value = group;
+  selectedDetail.value = null;
+  await fetchCodeDetails(group.id);
+};
+
+/* ✅ 선택한 코드 그룹의 코드 목록 */
 const selectedGroupDetails = computed(() => {
   return selectedGroup.value ? codeDetails.value[selectedGroup.value.id] || [] : [];
 });
 
-// ✅ 코드 그룹 선택
-const selectGroup = (group) => {
-  selectedGroup.value = group;
-  selectedDetail.value = null; // 코드 그룹 선택 시 코드 상세 초기화
-};
-
-// ✅ 코드 상세 선택
-const selectDetail = (detail) => {
-  selectedDetail.value = detail;
-  detailForm.value = { ...detail, order: selectedGroupDetails.value.indexOf(detail) + 1 };
-};
-
-// ✅ 코드 그룹 추가
-const addGroup = () => {
-  const newGroup = { name: "새 그룹", id: `group${codeGroups.value.length + 1}` };
-  codeGroups.value.push(newGroup);
-  codeDetails.value[newGroup.id] = [];
-};
-
-// ✅ 코드 그룹 삭제
-const removeGroup = () => {
-  if (!selectedGroup.value) return;
-  codeGroups.value = codeGroups.value.filter(group => group !== selectedGroup.value);
-  delete codeDetails.value[selectedGroup.value.id];
-  selectedGroup.value = null;
-};
-
-// ✅ 코드 상세 추가
-const addDetail = () => {
-  if (!selectedGroup.value) return;
-  codeDetails.value[selectedGroup.value.id].push({
-    name: "새 코드",
-    id: `code${selectedGroupDetails.value.length + 1}`,
-    description: "",
-  });
-};
-
-// ✅ 코드 상세 삭제
-const removeDetail = () => {
-  if (!selectedGroup.value || !selectedDetail.value) return;
-  codeDetails.value[selectedGroup.value.id] = selectedGroupDetails.value.filter(detail => detail !== selectedDetail.value);
-  selectedDetail.value = null;
-};
-
-// ✅ 코드 상세 저장
-const saveDetail = () => {
-  if (!selectedGroup.value || !selectedDetail.value) return;
-  const index = selectedGroupDetails.value.indexOf(selectedDetail.value);
-  if (index !== -1) {
-    selectedGroupDetails.value[index] = { ...detailForm.value };
+/* ✅ 코드 그룹 추가 */
+const addGroup = async () => {
+  const newGroup = { name: "새 그룹", id: `group${Date.now()}` };
+  try {
+    await axios.post("/code/group", newGroup);
+    fetchCodeGroups();
+  } catch (error) {
+    console.error("🚨 코드 그룹 추가 실패:", error);
   }
 };
+
+/* ✅ 코드 그룹 삭제 */
+const removeGroup = async () => {
+  if (!selectedGroup.value) return;
+  try {
+    await axios.post(`/code/group/delete/${selectedGroup.value.id}`);
+    fetchCodeGroups();
+    selectedGroup.value = null;
+  } catch (error) {
+    console.error("🚨 코드 그룹 삭제 실패:", error);
+  }
+};
+
+/* ✅ 코드 상세 추가 */
+const addDetail = async () => {
+  if (!selectedGroup.value) return;
+  const newCode = {
+    groupId: selectedGroup.value.id,
+    name: "새 코드",
+    id: `code${Date.now()}`,
+    description: "",
+  };
+  try {
+    await axios.post("/code", newCode);
+    fetchCodeDetails(selectedGroup.value.id);
+  } catch (error) {
+    console.error("🚨 코드 추가 실패:", error);
+  }
+};
+
+/* ✅ 코드 상세 삭제 */
+const removeDetail = async () => {
+  if (!selectedDetail.value) return;
+  try {
+    await axios.post(`/code/delete/${selectedDetail.value.id}`);
+    fetchCodeDetails(selectedGroup.value.id);
+    selectedDetail.value = null;
+  } catch (error) {
+    console.error("🚨 코드 삭제 실패:", error);
+  }
+};
+
+/* ✅ 코드 상세 저장 */
+const saveDetail = async () => {
+  if (!selectedDetail.value) return;
+  try {
+    await axios.post("/code/modify", { ...detailForm.value, groupId: selectedGroup.value.id });
+    fetchCodeDetails(selectedGroup.value.id);
+  } catch (error) {
+    console.error("🚨 코드 수정 실패:", error);
+  }
+};
+
+/* ✅ 페이지 로딩 시 코드 그룹 불러오기 */
+onMounted(fetchCodeGroups);
 </script>
 
 <style scoped>
