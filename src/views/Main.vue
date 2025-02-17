@@ -33,7 +33,7 @@
         <p>펫시터 목록</p>
       </div>
 
-      <div class="card" @click="goToMyReservation">
+      <div class="card" @click="goToMyReservationList">
         <UsersIcon class="icon" />
         <p>나의 신청 목록</p>
       </div>
@@ -64,14 +64,12 @@ const router = useRouter();
 const goToProfile = () => router.push("/profile");
 const goToPetList = () => router.push("/pet-list");
 const goToShopping = () => router.push("/shopping");
-const goToSitterProfile = () => {
-  console.log("🚀 goToSitterProfile 함수 실행됨!");
-  router.push("/sitter/profile/me");
-};
-
+const goToSitterProfile = () => router.push("/sitter/profile/me");
 const goToSitterList = () => router.push("/sitter-list");
 const goToPaymentTest = () => router.push("/payment-test");
 const goToCodeManage = () => router.push("/code-manage");
+const goToMyReservationList = () => router.push("/reservation/list");
+
 </script>
 
 <style scoped>
