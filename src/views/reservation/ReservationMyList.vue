@@ -142,12 +142,7 @@ onMounted(fetchReservations);
 </script>
 
 <style scoped>
-.container {
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: center;
-}
+
 
 /* ✅ 데이터 없음 */
 .no-data {

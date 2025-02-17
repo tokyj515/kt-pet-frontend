@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2>예약 승인 요청</h2>
+    <h2>예약 승인 요청 목록</h2>
 
     <div v-if="loading" class="loading">
       <p>로딩 중...</p>
@@ -185,12 +185,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.container {
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: center;
-}
 
 /* ✅ 데이터 없음 */
 .no-data {

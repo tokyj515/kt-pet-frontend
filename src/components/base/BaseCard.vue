@@ -27,7 +27,7 @@
   max-width: 95%;
   margin: 0 auto;
   width: 100%;
-  //margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .base-card:hover {
@@ -45,7 +45,7 @@
 }
 
 .card-body {
-  margin-bottom: 15px;
+  //margin-bottom: 15px;
 }
 
 .card-footer {
