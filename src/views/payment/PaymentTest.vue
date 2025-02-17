@@ -1,11 +1,12 @@
 <template>
-  <div>
-    <button @click="onPayment">
-      결제하기
-    </button>
+  <div class="container">
+    <h2>간편결제</h2>
+    <BaseButton @click="onPayment" :primary="2">결제하기</BaseButton>
   </div>
 </template>
 <script setup>
+import BaseButton from "@/components/base/BaseButton.vue";
+
 const onPayment = () => {
   /* 1. 가맹점 식별하기 */
   const { IMP } = window;
@@ -15,7 +16,7 @@ const onPayment = () => {
     pg: 'uplus', // 채널로 등록된 PG사만 사용가능하다. PG사마다 결제 화면이 달라진다 => html5_inicis
     pay_method: 'card', // 결제수단
     merchant_uid: `mid_${new Date().getTime()}`, // 주문번호 -> 이거는 실제 결제할 때 생기는 주문코드같은 거 넣기
-    amount: 10, // 결제금액
+    amount: 200, // 결제금액
     name: '결제 테스틑 개발 중', // 주문명 -> 제품명 그런 거
     buyer_name: '홍길동', // 구매자 이름
     buyer_tel: '01012341234', // 구매자 전화번호
