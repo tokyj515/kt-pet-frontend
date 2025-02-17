@@ -147,14 +147,22 @@ const fetchCodeDetails = async (codeGroupId) => {
 };
 
 /* ✅ 코드 그룹 선택 */
+/* ✅ 코드 그룹 선택 (선택 시 자동으로 코드 리스트 불러오기) */
 const selectGroup = async (group) => {
   if (!group) return;
   selectedGroup.value = group;
   selectedDetail.value = null;
 
   console.log("📌 선택된 그룹:", group);
+
+  // ✅ 그룹 선택 시 해당 그룹의 코드 리스트 불러오기
   await fetchCodeDetails(group.id);
 };
+
+/* ✅ 선택한 코드 그룹의 코드 목록 (computed 활용) */
+const selectedGroupDetails = computed(() => {
+  return selectedGroup.value ? codeDetails.value[selectedGroup.value.id] || [] : [];
+});
 
 /* ✅ 코드 상세 선택 */
 const selectDetail = (detail) => {
