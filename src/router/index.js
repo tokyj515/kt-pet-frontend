@@ -15,7 +15,8 @@ import ComponentTest from "@/views/ComponentTest.vue";
 import SitterMyProfile from "@/views/user/SitterMyProfile.vue";
 import CodeManage from "@/views/code/CodeManage.vue";
 import ReservationRegister from "@/views/reservation/ReservationRegister.vue";
-import ReservationList from "@/views/reservation/ReservationList.vue";  // 추가
+import ReservationRequestList from "@/views/reservation/ReservationRequestList.vue";
+import ReservationMyList from "@/views/reservation/ReservationMyList.vue";  // 추가
 
 const routes = [
     { path: "/", component: Main },
@@ -34,7 +35,8 @@ const routes = [
     { path: "/code-manage", component: CodeManage },
     { path: "/component-test", component: ComponentTest },
     { path: "/reservation/register/:sitterId", component: ReservationRegister },
-    { path: "/reservation/list", component: ReservationList },
+    { path: "/reservation/request/list", component: ReservationRequestList },
+    { path: "/reservation/list", component: ReservationMyList },
 ];
 
 const router = createRouter({

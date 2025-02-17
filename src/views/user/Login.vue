@@ -40,6 +40,7 @@ const login = async () => {
     localStorage.setItem("token", token);
     localStorage.setItem("username", response.data.data.username);
     localStorage.setItem("email", response.data.data.username);
+    localStorage.setItem("role", response.data.data.userRole);
     console.log("✅ 토큰 및 사용자 정보 저장 완료:", token);
 
     router.push("/");

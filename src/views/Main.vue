@@ -21,46 +21,59 @@
         <p>쇼핑몰</p>
       </div>
 
-      <!-- 펫시터 프로필 이동 카드 -->
-      <div class="card" @click="goToSitterProfile">
+      <!-- 🟢 ROLE_ADMIN 권한이 있을 때만 보이는 카드 -->
+      <div v-if="isAdmin" class="card" @click="goToSitterProfile">
         <HomeIcon class="icon" />
         <p>펫시터 프로필</p>
       </div>
 
-      <!-- 펫시터 목록 이동 카드 -->
-      <div class="card" @click="goToSitterList">
-        <UsersIcon class="icon" />
-        <p>펫시터 목록</p>
-      </div>
-
-      <div class="card" @click="goToMyReservationList">
+      <div v-if="isAdmin" class="card" @click="goToReservationRequestList">
         <UsersIcon class="icon" />
         <p>나의 신청 목록</p>
       </div>
 
-
-
-      <!-- 결제하기 이동 카드 -->
-      <div class="card" @click="goToPaymentTest">
+      <!-- 🟢 ROLE_ADMIN 전용 기능 -->
+      <div v-if="isAdmin" class="card" @click="goToPaymentTest">
         <CreditCardIcon class="icon" />
         <p>결제하기 예제</p>
       </div>
 
-      <!-- 코드 관리 화면 이동 카드 -->
-      <div class="card" @click="goToCodeManage">
+      <div v-if="isAdmin" class="card" @click="goToCodeManage">
         <AxeIcon class="icon" />
         <p>코드 관리</p>
       </div>
+
+      <!-- 펫시터 목록은 모든 사용자에게 보임 -->
+      <div class="card" @click="goToSitterList">
+        <UsersIcon class="icon" />
+        <p>펫시터 목록</p>
+      </div>
     </div>
   </div>
-
 </template>
+
 <script setup>
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { User as UserIcon, PawPrint as PawPrintIcon, ShoppingCart as ShoppingCartIcon, Home as HomeIcon, Users as UsersIcon, CreditCard as CreditCardIcon, Axe as AxeIcon } from "lucide-vue-next";
 
 const router = useRouter();
+const isAdmin = ref(false); // 🟢 관리자 여부 저장
 
+// ✅ 로컬스토리지에서 role 확인
+const checkAdminRole = () => {
+  const userRole = localStorage.getItem("role"); // 🟢 로그인 시 저장된 role 가져오기
+  console.log("🟢 현재 사용자 역할:", userRole);
+
+  if (userRole === "ROLE_ADMIN") {
+    isAdmin.value = true;
+  }
+};
+
+// ✅ 페이지 로딩 시 역할 체크
+onMounted(checkAdminRole);
+
+// ✅ 페이지 이동 함수들
 const goToProfile = () => router.push("/profile");
 const goToPetList = () => router.push("/pet-list");
 const goToShopping = () => router.push("/shopping");
@@ -68,7 +81,7 @@ const goToSitterProfile = () => router.push("/sitter/profile/me");
 const goToSitterList = () => router.push("/sitter-list");
 const goToPaymentTest = () => router.push("/payment-test");
 const goToCodeManage = () => router.push("/code-manage");
-const goToMyReservationList = () => router.push("/reservation/list");
+const goToReservationRequestList = () => router.push("/reservation/request/list");
 
 </script>
 
@@ -120,4 +133,3 @@ const goToMyReservationList = () => router.push("/reservation/list");
   color: #492815; /* 텍스트도 갈색으로 */
 }
 </style>
-
