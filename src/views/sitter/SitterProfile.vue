@@ -41,9 +41,7 @@
           <h3>돌봄 가능 동물</h3>
         </template>
         <template #body>
-          <BaseChip
-              :chips="validCarePetList.map(pet => pet.petType)"
-          />
+          <BaseChip :chips="validCarePetList.map(pet => pet.petType)" />
         </template>
       </BaseCard>
 
@@ -58,6 +56,7 @@
           />
         </template>
       </BaseCard>
+
     </div>
 
     <!-- ✅ 데이터가 없는 경우 -->
@@ -66,7 +65,9 @@
     </div>
 
     <!-- ✅ 뒤로 가기 버튼 -->
-    <BaseButton @click="goBack" >뒤로 가기</BaseButton>
+    <!-- ✅ 예약하기 버튼 -->
+    <BaseButton @click="goToReservation" :primary="4">예약하기</BaseButton>
+    <BaseButton @click="goBack">뒤로 가기</BaseButton>
   </div>
 </template>
 
@@ -77,10 +78,10 @@ import axios from "axios";
 import BaseCard from "@/components/base/BaseCard.vue";
 import BaseChip from "@/components/base/BaseChip.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
-import BaseGrid from "@/components/base/BaseGrid.vue"; // ✅ 프로필 정보 테이블 컴포넌트
+import BaseGrid from "@/components/base/BaseGrid.vue";
 
 const router = useRouter();
-const route = useRoute(); // ✅ URL에서 sitterId 가져오기
+const route = useRoute();
 const profile = ref(null);
 const loading = ref(true);
 
@@ -104,15 +105,15 @@ const fetchProfile = async () => {
   } catch (error) {
     console.error("🚨 프로필 불러오기 실패:", error);
     alert(error.response?.data?.message || "프로필을 불러오지 못했습니다.");
-    router.push("/sitter-list"); // 오류 발생 시 목록으로 리디렉션
+    router.push("/sitter-list");
   } finally {
     loading.value = false;
   }
 };
 
-// ✅ 시간 포맷 함수
-const formatTime = (time) => {
-  return time && time !== "string" ? time : "";
+// ✅ 예약 페이지 이동
+const goToReservation = () => {
+  router.push(`/reservation/register/${sitterId}`);
 };
 
 // ✅ 유효한 돌봄 시간 필터링
@@ -127,17 +128,21 @@ const validCarePetList = computed(() => {
   return profile.value?.carePetList?.filter((pet) => pet.petType !== "string") || [];
 });
 
+// ✅ 시간 포맷
+const formatTime = (time) => {
+  return time && time !== "string" ? time : "";
+};
+
 // ✅ 뒤로 가기
 const goBack = () => {
   router.push("/sitter-list");
 };
 
-// ✅ 컴포넌트 마운트 시 API 호출
+// ✅ 페이지 로딩 시 데이터 가져오기
 onMounted(fetchProfile);
 </script>
 
 <style scoped>
-
 /* ✅ 프로필 내용 */
 .profile-content {
   display: flex;

@@ -33,10 +33,17 @@
         <p>펫시터 목록</p>
       </div>
 
+      <div class="card" @click="goToMyReservation">
+        <UsersIcon class="icon" />
+        <p>나의 신청 목록</p>
+      </div>
+
+
+
       <!-- 결제하기 이동 카드 -->
       <div class="card" @click="goToPaymentTest">
         <CreditCardIcon class="icon" />
-        <p>결제하기</p>
+        <p>결제하기 예제</p>
       </div>
 
       <!-- 코드 관리 화면 이동 카드 -->

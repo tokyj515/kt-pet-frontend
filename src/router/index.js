@@ -13,7 +13,8 @@ import SitterList from "@/views/sitter/SitterList.vue";
 import PaymentTest from "@/views/payment/PaymentTest.vue";
 import ComponentTest from "@/views/ComponentTest.vue";
 import SitterMyProfile from "@/views/user/SitterMyProfile.vue";
-import CodeManage from "@/views/code/CodeManage.vue";  // 추가
+import CodeManage from "@/views/code/CodeManage.vue";
+import ReservationRegister from "@/views/reservation/ReservationRegister.vue";  // 추가
 
 const routes = [
     { path: "/", component: Main },
@@ -31,6 +32,7 @@ const routes = [
     { path: "/payment-test", component: PaymentTest },
     { path: "/code-manage", component: CodeManage },
     { path: "/component-test", component: ComponentTest },
+    { path: "/reservation/register/:sitterId", component: ReservationRegister },
 ];
 
 const router = createRouter({
