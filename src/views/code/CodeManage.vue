@@ -178,6 +178,63 @@ const removeGroup = async () => {
   }
 };
 
+/* ✅ 코드 상세 추가 */
+const addDetail = async () => {
+  if (!selectedGroup.value) {
+    alert("코드 그룹을 먼저 선택하세요.");
+    return;
+  }
+
+  const newCode = {
+    codeGroupId: selectedGroup.value.id, // 그룹 ID
+    name: "새 코드", // 기본 값
+    id: `code${Date.now()}`, // 임시 ID (백엔드에서 실제 ID 생성될 것)
+    description: "",
+  };
+
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.post("/code", newCode, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.data.code === 200) {
+      alert("코드가 추가되었습니다.");
+      fetchCodeDetails(selectedGroup.value.id); // ✅ 추가 후 다시 리스트 불러오기
+    } else {
+      alert("코드 추가 실패: " + response.data.message);
+    }
+  } catch (error) {
+    console.error("🚨 코드 추가 실패:", error);
+  }
+};
+
+/* ✅ 코드 상세 삭제 */
+const removeDetail = async () => {
+  if (!selectedDetail.value) {
+    alert("삭제할 코드를 선택하세요.");
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.post(`/code/delete/${selectedDetail.value.id}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.data.code === 200) {
+      alert("코드가 삭제되었습니다.");
+      selectedDetail.value = null; // ✅ 선택한 코드 초기화
+      fetchCodeDetails(selectedGroup.value.id); // ✅ 삭제 후 다시 리스트 불러오기
+    } else {
+      alert("코드 삭제 실패: " + response.data.message);
+    }
+  } catch (error) {
+    console.error("🚨 코드 삭제 실패:", error);
+  }
+};
+
+
 /* ✅ 페이지 로딩 시 코드 그룹 불러오기 */
 onMounted(fetchCodeGroups);
 </script>
