@@ -2,6 +2,7 @@
   <div class="container">
     <h2>예약 정보 입력</h2>
 
+    <!-- ✅ 펫 선택 -->
     <BaseCard>
       <template #header>
         <h3>예약할 펫 선택</h3>
@@ -15,6 +16,7 @@
       </template>
     </BaseCard>
 
+    <!-- ✅ 예약할 시간 선택 -->
     <BaseCard>
       <template #header>
         <h3>예약할 시간 선택</h3>
@@ -37,7 +39,7 @@
                   :class="{ selected: isSelectedTime(day, hour) }"
                   @click="toggleTimeSelection(day, hour)"
               >
-                {{ hour }}
+                {{ formatTime(hour) }}
               </BaseButton>
             </td>
           </tr>
@@ -46,11 +48,13 @@
       </template>
     </BaseCard>
 
+    <!-- ✅ 총 요금 표시 -->
     <div class="charge-info">
       <span>총 요금:</span>
       <strong>{{ totalCharge }} 원</strong>
     </div>
 
+    <!-- ✅ 예약 버튼 -->
     <BaseButton @click="reserveSitter" :primary="4" class="reserve-btn">예약하기</BaseButton>
   </div>
 </template>
@@ -128,24 +132,30 @@ const groupedCareTimes = computed(() => {
       }, {});
 });
 
-// ✅ 시간대를 개별 버튼으로 변환 (07:00 ~ 20:00 → 07:00, 08:00, ..., 20:00)
+// ✅ 시간대를 개별 버튼으로 변환 (07:00 → 07시 형태)
 const generateHourSlots = (timeSlots) => {
   const hours = new Set();
   timeSlots.forEach(slot => {
     const start = parseInt(slot.startTime.split(":")[0]);
     const end = parseInt(slot.endTime.split(":")[0]);
     for (let i = start; i <= end; i++) {
-      hours.add(`${i.toString().padStart(2, '0')}:00`);
+      hours.add(i); // ✅ 정수값만 저장하여 formatTime 적용
     }
   });
   return Array.from(hours).sort();
 };
 
+// ✅ 시간 포맷 변경 함수 (07시 형태)
+const formatTime = (hour) => {
+  return `${hour.toString().padStart(2, '0')}시`;
+};
+
 // ✅ 선택한 시간 토글
 const toggleTimeSelection = (day, hour) => {
-  const index = selectedTimes.value.findIndex(t => t.day === day && t.startTime === hour);
+  const formattedHour = formatTime(hour); // ✅ 선택할 때도 포맷 적용
+  const index = selectedTimes.value.findIndex(t => t.day === day && t.startTime === formattedHour);
   if (index === -1) {
-    selectedTimes.value.push({ day, startTime: hour, endTime: hour });
+    selectedTimes.value.push({ day, startTime: formattedHour, endTime: formattedHour });
   } else {
     selectedTimes.value.splice(index, 1);
   }
@@ -153,7 +163,7 @@ const toggleTimeSelection = (day, hour) => {
 
 // ✅ 선택된 시간인지 확인
 const isSelectedTime = (day, hour) => {
-  return selectedTimes.value.some(t => t.day === day && t.startTime === hour);
+  return selectedTimes.value.some(t => t.day === day && t.startTime === formatTime(hour));
 };
 
 // ✅ 총 요금 계산
@@ -228,20 +238,25 @@ onMounted(async () => {
   background-color: #FFE0B2;
 }
 
-/* ✅ 시간 선택 버튼 */
 .time-cell {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 8px;
+  padding: 5px 0;
 }
 
 .time-cell button {
-  background: #f3f3f3;
-  padding: 8px 12px;
+  background: #f9f9f9;
+  padding: 10px 14px;
   border-radius: 6px;
   border: 1px solid #ddd;
   cursor: pointer;
   transition: all 0.2s;
+  max-width: 60px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #555555;
 }
 
 .time-cell button:hover {
@@ -253,18 +268,12 @@ onMounted(async () => {
   color: white;
 }
 
-/* ✅ 요금 정보 */
 .charge-info {
   font-size: 1.2rem;
   font-weight: bold;
   margin-top: 15px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #f9f9f9;
 }
 
-/* ✅ 예약 버튼 */
 .reserve-btn {
   margin-top: 20px;
   width: 100%;
