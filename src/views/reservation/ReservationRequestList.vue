@@ -65,8 +65,10 @@ const isSitter = ref(false);
 
 // ✅ 예약 상태 변환 함수
 const getStatusLabel = (status) => {
-  if (status === null) return "승인 대기";
-  return status === 0 ? "승인 대기" : "승인 완료";
+  if (status === null || status === 0) return "승인 대기"; // ✅ null 또는 0이면 승인 대기
+  if (status === 1) return "승인 완료"; // ✅ 1이면 승인 완료
+  if (status === 2) return "취소됨"; // ✅ 2이면 취소됨 (삭제 또는 거절)
+  return "알 수 없음"; // ✅ 예상하지 못한 값이 들어올 경우
 };
 
 // ✅ 예약 시간 병합 함수 (연속된 시간대 묶기)
