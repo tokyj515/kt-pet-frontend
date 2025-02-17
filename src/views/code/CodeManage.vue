@@ -1,6 +1,6 @@
 <template>
   <div class="code-manager-container">
-    <!-- ✅ 코드 그룹 (세로 길게) -->
+    <!-- ✅ 코드 그룹 -->
     <div class="code-group">
       <div class="header">
         <h3>코드 그룹</h3>
@@ -20,7 +20,7 @@
         <tbody>
         <tr
             v-for="(group, index) in codeGroups || []"
-            :key="index"
+            :key="group.id"
             @click="selectGroup(group)"
             :class="{ selected: selectedGroup?.id === group.id }"
         >
@@ -31,7 +31,7 @@
       </table>
     </div>
 
-    <!-- ✅ 코드 상세 (그룹 선택 시만 표시) -->
+    <!-- ✅ 코드 상세 -->
     <div v-if="selectedGroup" class="code-detail">
       <div class="header">
         <h3>{{ selectedGroup.name }} - 코드 리스트</h3>
@@ -53,7 +53,7 @@
         <tbody>
         <tr
             v-for="(detail, index) in selectedGroupDetails || []"
-            :key="index"
+            :key="detail.codeId"
             @click="selectDetail(detail)"
             :class="{ selected: selectedDetail?.codeId === detail.codeId }"
         >
@@ -108,6 +108,8 @@ const fetchCodeGroups = async () => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
+    console.log("🚀 그룹 목록 응답 데이터:", response.data);
+
     if (response.data.code === 200 && Array.isArray(response.data.data)) {
       codeGroups.value = response.data.data.map(group => ({
         id: group.codeGroupId,
@@ -131,7 +133,10 @@ const fetchCodeDetails = async (codeGroupId) => {
     const response = await axios.get(`/code/group/${codeGroupId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    codeDetails.value[codeGroupId] = response.data.data?.codes.map(code => ({
+
+    console.log(`🚀 ${codeGroupId} 그룹 코드 응답 데이터:`, response.data);
+
+    codeDetails.value[codeGroupId] = response.data.data?.codes?.map(code => ({
       codeId: code.codeId,
       name: code.name,
       description: code.description,
@@ -146,6 +151,8 @@ const selectGroup = async (group) => {
   if (!group) return;
   selectedGroup.value = group;
   selectedDetail.value = null;
+
+  console.log("📌 선택된 그룹:", group);
   await fetchCodeDetails(group.id);
 };
 
@@ -226,6 +233,69 @@ const saveCode = async () => {
     console.error("🚨 코드 추가 실패:", error);
   }
 };
+
+const removeGroup = async () => {
+  if (!selectedGroup.value) {
+    alert("삭제할 코드 그룹을 선택하세요.");
+    return;
+  }
+
+  const confirmDelete = confirm("정말 해당 코드 그룹과 포함된 코드를 삭제하시겠습니까?");
+  if (!confirmDelete) return;
+
+  const token = localStorage.getItem("token");
+  const groupId = selectedGroup.value.id;
+  const codesToDelete = codeDetails.value[groupId] || [];
+
+  try {
+    // ✅ 1. 해당 그룹 내 코드 먼저 삭제
+    for (const code of codesToDelete) {
+      await axios.post(`/code/delete/${code.codeId}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    }
+
+    // ✅ 2. 그룹 삭제
+    const response = await axios.post(`/code/group/delete/${groupId}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.data.code === 200) {
+      alert("코드 그룹과 포함된 코드가 삭제되었습니다.");
+      selectedGroup.value = null;
+      fetchCodeGroups();
+    }
+  } catch (error) {
+    console.error("🚨 코드 그룹 삭제 실패:", error);
+  }
+};
+
+
+const removeDetail = async () => {
+  if (!selectedDetail.value) {
+    alert("삭제할 코드를 선택하세요.");
+    return;
+  }
+
+  const confirmDelete = confirm("정말 해당 코드를 삭제하시겠습니까?");
+  if (!confirmDelete) return;
+
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.post(`/code/delete/${selectedDetail.value.codeId}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.data.code === 200) {
+      alert("코드가 삭제되었습니다.");
+      selectedDetail.value = null;
+      fetchCodeDetails(selectedGroup.value.id);
+    }
+  } catch (error) {
+    console.error("🚨 코드 삭제 실패:", error);
+  }
+};
+
 
 /* ✅ 페이지 로딩 시 코드 그룹 불러오기 */
 onMounted(fetchCodeGroups);
