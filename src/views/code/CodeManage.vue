@@ -321,23 +321,31 @@ onMounted(fetchCodeGroups);
   align-items: flex-start;
 }
 
-.code-group, .code-detail {
-  flex: 1; /* 🔥 두 개의 영역을 동일한 크기로 설정 */
+.code-group {
+  flex: 0.5; /* 🔥 그룹 리스트는 절반만 차지 */
   background: white;
   padding: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
   min-height: 600px;
   height: 100%;
+  max-width: 50%;
 }
 
 .code-detail {
-  visibility: hidden; /* 🔥 초기에 보이지 않게 설정 */
+  flex: 0.5; /* 🔥 코드 리스트도 동일한 크기 */
+  background: white;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: none; /* 🔥 초기에는 숨김 */
+  flex-direction: column;
 }
 
 .code-detail.visible {
-  visibility: visible; /* 🔥 그룹 선택 시 보이도록 변경 */
+  display: flex; /* 🔥 그룹 선택 시 보이도록 변경 */
 }
+
 
 .header {
   display: flex;
