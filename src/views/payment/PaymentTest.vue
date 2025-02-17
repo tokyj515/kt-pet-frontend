@@ -2,10 +2,14 @@
   <div class="container">
     <h2>간편결제</h2>
     <BaseButton @click="onPayment" :primary="2">결제하기</BaseButton>
+    <BaseButton @click="goBack" :primary="3">뒤로 가기</BaseButton>
   </div>
 </template>
 <script setup>
 import BaseButton from "@/components/base/BaseButton.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const onPayment = () => {
   /* 1. 가맹점 식별하기 */
@@ -42,4 +46,10 @@ const callback = (response) => {
     alert(`결제 실패: ${error_msg}`);
   }
 };
+
+// ✅ 뒤로 가기
+const goBack = () => {
+  router.push("/");
+};
+
 </script>
