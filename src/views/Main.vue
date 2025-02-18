@@ -30,7 +30,7 @@
       <!-- 사용자가 예약한 목록 -->
       <div class="card" @click="goToReservationMyList">
         <UsersIcon class="icon" />
-        <p>내 목록</p>
+        <p>내 예약 목록</p>
       </div>
 
     </div>
