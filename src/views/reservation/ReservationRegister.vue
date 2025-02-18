@@ -184,36 +184,63 @@ const onPaymentAndReserve = () => {
 
   /* 1. 가맹점 식별하기 */
   const { IMP } = window;
-  IMP.init('imp48126247'); // 고객사 식별 코드 (실제 코드 입력 필요)
+  IMP.init("imp48126247"); // 고객사 식별 코드 (실제 코드 입력 필요)
 
-  /* 2. 결제 데이터 정의하기 */
-  const data = {
-    pg: 'uplus', // PG사
-    pay_method: 'card', // 결제수단
-    merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
-    amount: totalCharge.value, // 총 결제 금액 (totalCharge 사용)
-    name: '펫시터 예약 결제', // 주문명
+  /* 2. 결제 데이터 정의 */
+  const paymentData = {
+    pg: "uplus", // PG사
+    pay_method: "card", // 결제수단
+    merchant_uid: `mid_${new Date().getTime()}`, // 주문번호 (유니크 값)
+    amount: totalCharge.value, // 총 결제 금액
+    name: "펫시터 예약 결제", // 주문명
     buyer_name: localStorage.getItem("username") || "이름 없음", // 구매자 이름
     buyer_tel: "01012341234", // 구매자 전화번호 (실제 사용자 정보 필요)
     buyer_email: localStorage.getItem("email") || "이메일 없음", // 구매자 이메일
     buyer_addr: "주소 없음", // 주소 정보 필요 시 설정
-    buyer_postcode: "00000" // 우편번호 정보 필요 시 설정
+    buyer_postcode: "00000", // 우편번호 정보 필요 시 설정
   };
 
   /* 3. 결제 창 호출 및 콜백 */
-  IMP.request_pay(data, (response) => {
+  IMP.request_pay(paymentData, async (response) => {
     const { success, merchant_uid, error_msg } = response;
 
     if (success) {
       alert("결제가 완료되었습니다.");
       console.log("✅ 결제 성공 응답:", response);
 
-      // 결제 성공 후 예약 요청 진행
-      reserveSitter(merchant_uid);
+      // ✅ 결제 정보 저장 후 예약 진행
+      await savePaymentInfo(merchant_uid);
+      await reserveSitter(merchant_uid);
     } else {
       alert(`결제 실패: ${error_msg}`);
     }
   });
+};
+
+// ✅ 결제 후 서버에 결제 정보 저장
+const savePaymentInfo = async (merchantUid) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.post(
+        "http://localhost:8080/payment/complete",
+        {
+          merchantUid,
+          buyerName: localStorage.getItem("username"),
+          buyerEmail: localStorage.getItem("email"),
+          buyerTel: "01012341234", // 전화번호 필요 시 변경
+          amount: totalCharge.value,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+    );
+
+    console.log("✅ 결제 정보가 서버에 저장되었습니다:", response.data);
+  } catch (error) {
+    console.error("🚨 결제 정보 저장 실패:", error);
+    alert("결제 정보 저장에 실패했습니다.");
+  }
 };
 
 // ✅ 예약 요청 API 호출 (결제 성공 후 실행)
@@ -221,15 +248,19 @@ const reserveSitter = async (merchantUid) => {
   try {
     const token = localStorage.getItem("token");
 
-    const response = await axios.post("http://localhost:8080/reservation/register", {
-      sitterId: sitterId,
-      petId: selectedPetId.value,
-      careTimeDtoList: selectedTimes.value,
-      totalCharge: totalCharge.value,
-      paymentId: merchantUid, // 결제 성공 시 받은 merchant_uid 저장
-    }, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.post(
+        "http://localhost:8080/reservation/register",
+        {
+          sitterId: sitterId,
+          petId: selectedPetId.value,
+          careTimeDtoList: selectedTimes.value,
+          totalCharge: totalCharge.value,
+          paymentId: merchantUid, // 결제 성공 시 받은 merchant_uid 저장
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+    );
 
     if (response.data.code === 200) {
       alert("예약이 완료되었습니다!");
@@ -242,6 +273,7 @@ const reserveSitter = async (merchantUid) => {
     alert("예약을 처리하는 중 오류가 발생했습니다.");
   }
 };
+
 
 
 // // ✅ 예약 요청 API 호출
