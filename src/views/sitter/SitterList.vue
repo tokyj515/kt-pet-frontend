@@ -1,299 +1,203 @@
 <template>
   <div class="container">
-    <h2>펫시터 목록</h2>
+    <h2>펫시터 리스트</h2>
 
-    <!-- 로딩 중 -->
+    <!-- ✅ 로딩 중 -->
     <div v-if="loading" class="loading">
       <p>로딩 중...</p>
     </div>
 
-    <!-- 펫시터 목록 -->
+    <!-- ✅ 펫시터 목록 -->
     <div v-else class="sitter-list">
-      <div v-for="sitter in sitters" :key="sitter.sitterId" class="card">
-        <div class="card-header">
-          <h3>{{ sitter.name }}</h3>
-          <span class="location">{{ sitter.location }}</span>
-        </div>
-
-        <div class="card-body">
-          <!-- 돌봄 가능 동물 -->
-          <div class="care-pets">
-            <h4>돌봄 가능 동물</h4>
-            <div class="chips">
-              <span v-for="(pet, index) in filterValidPets(sitter.carePetList)" 
-                    :key="index" 
-                    class="chip">
-                {{ pet.petType }}
-              </span>
-            </div>
+      <BaseCard
+          v-for="sitter in sitters"
+          :key="sitter.sitterId"
+          class="clickable-card"
+          @click="viewDetail(sitter.sitterId)"
+      >
+        <template #header>
+          <div class="card-header">
+            <h3 class="sitter-name">{{ sitter.name }}</h3>
+            <span class="location">{{ sitter.location || "위치 정보 없음" }}</span>
           </div>
+        </template>
+
+        <template #body>
+          <!-- 돌봄 가능 동물 -->
+          <BaseChip
+              :chips="filterValidPets(sitter.carePetList)?.map(pet => pet.petType)"
+              label="돌봄 가능 동물"
+          />
 
           <!-- 돌봄 가능 시간 -->
-          <div class="care-times">
-            <h4>돌봄 가능 시간</h4>
-            <div class="time-list">
-              <div v-for="(time, index) in filterValidTimes(sitter.careTimeList)" 
-                   :key="index" 
-                   class="time-item">
-                <span class="day">{{ time.day }}</span>
-                <span>{{ time.startTime }} - {{ time.endTime }}</span>
-              </div>
-            </div>
-          </div>
+          <BaseChip
+              :chips="filterValidTimes(sitter.careTimeList)?.map(time => `${time.day}: ${time.startTime} - ${time.endTime}`)"
+              label="돌봄 가능 시간"
+          />
 
-          <!-- 요금 정보 -->
+          <!-- ✅ 요금 정보 -->
           <div class="charge">
-            <span class="label">시간당</span>
-            <span class="value">{{ sitter.charge }}원</span>
+            <span class="label">시간당 요금</span>
+            <span class="value">{{ sitter.charge ? `${sitter.charge}원` : "미등록" }}</span>
           </div>
-        </div>
-
-        <!-- 카드 하단 버튼 -->
-        <div class="card-footer">
-          <button class="btn btn-primary" @click="viewDetail(sitter.sitterId)">
-            상세 보기
-          </button>
-        </div>
-      </div>
+        </template>
+      </BaseCard>
     </div>
 
-    <!-- 데이터가 없는 경우 -->
+    <!-- ✅ 데이터 없음 -->
     <div v-if="!loading && sitters.length === 0" class="no-data">
       <p>등록된 펫시터가 없습니다.</p>
     </div>
+
+    <!-- ✅ 뒤로 가기 버튼 -->
+    <BaseButton @click="goBack" >뒤로 가기</BaseButton>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import axios from 'axios';
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
+import BaseCard from "@/components/base/BaseCard.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
+import BaseChip from "@/components/base/BaseChip.vue";
 
 const router = useRouter();
 const sitters = ref([]);
 const loading = ref(true);
 
-// 펫시터 목록 조회
+// ✅ 펫시터 목록 조회
 const fetchSitters = async () => {
+  loading.value = true; // 🔥 API 호출 시작 시 로딩 상태 설정
+
   try {
-    const token = localStorage.getItem('token');  // 토큰 가져오기
-    const response = await axios.get('http://localhost:8080/sitter/profile/list', {
+    const token = localStorage.getItem("token");
+    const response = await axios.get("http://localhost:8080/sitter/profile/list", {
       headers: {
-        'Authorization': `Bearer ${token}`  // Authorization 헤더 추가
+        Authorization: `Bearer ${token}`
       }
     });
-    sitters.value = response.data.data;
+
+    console.log("🚀 펫시터 목록 응답:", response.data);
+    sitters.value = response.data.data || []; // 🔥 데이터가 없을 경우 빈 배열 반환
   } catch (error) {
-    console.error('펫시터 목록 조회 실패:', error);
-    alert('펫시터 목록을 불러오는데 실패했습니다.');
+    console.error("🚨 펫시터 목록 조회 실패:", error);
+    alert("펫시터 목록을 불러오는데 실패했습니다.");
   } finally {
-    loading.value = false;
+    loading.value = false; // 🔥 API 응답 후 로딩 종료
   }
 };
 
-// 유효한 돌봄 동물 필터링
+// ✅ 유효한 돌봄 동물 필터링
 const filterValidPets = (pets) => {
-  return pets.filter(pet => pet.petType !== 'string');
+  return pets?.filter(pet => pet.petType !== "string") || [];
 };
 
-// 유효한 돌봄 시간 필터링
+// ✅ 유효한 돌봄 시간 필터링
 const filterValidTimes = (times) => {
-  return times.filter(time => 
-    time.day !== 'string' && 
-    time.startTime !== 'string' && 
-    time.endTime !== 'string'
-  );
+  return times?.filter(time => time.day !== "string" && time.startTime !== "string" && time.endTime !== "string") || [];
 };
 
-// 상세 페이지로 이동
+// ✅ 상세 페이지로 이동
 const viewDetail = (sitterId) => {
   router.push(`/sitter/profile/${sitterId}`);
+};
+
+// ✅ 뒤로 가기
+const goBack = () => {
+  router.push("/");
 };
 
 onMounted(fetchSitters);
 </script>
 
 <style scoped>
+/* ✅ 전체 컨테이너 */
 .container {
-  max-width: 800px;
-  margin: 0 auto;
   padding: 20px;
-}
-
-h2 {
+  max-width: 1000px;
+  margin: 0 auto;
   text-align: center;
-  margin-bottom: 30px;
-  color: #333;
 }
 
+/* ✅ 시터 리스트 스타일 (🔥 2열 배치) */
 .sitter-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); /* 최소 400px, 최대 1fr */
+  gap: 10px;
+  margin: 20px 0;
 }
 
-.card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  transition: transform 0.2s;
-  max-width: 70%;  /* 카드 최대 너비 제한 */
-  margin: 0 auto;    /* 카드 중앙 정렬 */
-  width: 100%;       /* 모바일에서 전체 너비 사용 */
+/* ✅ 카드 전체 클릭 가능 */
+.clickable-card {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
 }
 
-.card:hover {
-  transform: translateY(-2px);
+.clickable-card:hover {
+  transform: translateY(-3px);
 }
 
+/* ✅ 카드 헤더 스타일 */
 .card-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #eee;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
 }
 
-.card-header h3 {
-  margin: 0;
-  font-size: 1.3rem;
-  color: #2c3e50;
+/* ✅ 시터 이름 */
+.sitter-name {
+  font-size: 1.2rem;
+  color: #492815;
 }
 
+/* ✅ 위치 정보 */
 .location {
-  background-color: #f0f0f0;
+  background-color: #FED7C3;
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 0.9rem;
-  color: #666;
+  color: #492815;
+  white-space: nowrap;
+  margin-left: auto;
 }
 
-.card-body {
-  padding: 0 10px;
-}
-
-.care-pets, .care-times {
-  margin-bottom: 20px;
-}
-
-h4 {
-  font-size: 1rem;
-  color: #666;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-h4::before {
-  content: "•";
-  color: #007AFF;
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.chip {
-  background: #007AFF;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-}
-
-.time-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.time-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 15px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  font-size: 0.9rem;
-}
-
-.day {
-  font-weight: 600;
-  color: #2c3e50;
-}
-
+/* ✅ 요금 정보 */
 .charge {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 20px 0;
   padding: 12px 15px;
-  background: #f8f9fa;
   border-radius: 8px;
+  border: 1px solid #FED7C3;
 }
 
+/* ✅ 요금 라벨 */
 .charge .label {
-  color: #666;
-  font-size: 0.95rem;
+  color: #492815;
 }
 
+/* ✅ 요금 값 */
 .charge .value {
-  font-weight: 600;
-  color: #007AFF;
-  font-size: 1.1rem;
+  font-weight: bold;
+  color: #492815;
 }
 
-.card-footer {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-  text-align: right;
-}
-
-.btn-primary {
-  background-color: #007AFF;
-  color: white;
-  padding: 8px 20px;
-  border-radius: 8px;
-  border: none;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-}
-
-.loading, .no-data {
+/* ✅ 데이터 없음 */
+.no-data {
   text-align: center;
   padding: 40px;
   color: #666;
 }
 
-@media (max-width: 480px) {
-  .container {
-    padding: 15px;
-  }
-
-  .card {
-    padding: 16px;
-    max-width: 100%;  /* 모바일에서는 컨테이너 전체 너비 사용 */
-  }
-
-  .time-item {
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .charge {
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-  }
+/* ✅ 로딩 중 */
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #555;
 }
 </style>
+
